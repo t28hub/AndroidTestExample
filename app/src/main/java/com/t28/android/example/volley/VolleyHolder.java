@@ -25,7 +25,7 @@ public class VolleyHolder {
 
     public static ImageLoader getImageLoader(Context context) {
         if (sImageLoader == null) {
-            sImageLoader = new ImageLoader(getRequestQueue(context), null);
+            sImageLoader = new ImageLoader(getRequestQueue(context), new NoImageCache());
         }
         return sImageLoader;
     }
