@@ -1,4 +1,4 @@
-package com.t28.android.example;
+package com.t28.android.example.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.t28.android.example.R;
 import com.t28.android.example.api.request.FeedRequest;
 import com.t28.android.example.data.model.Feed;
 import com.t28.android.example.volley.VolleyHolder;
