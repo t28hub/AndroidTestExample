@@ -2,7 +2,6 @@ package com.t28.android.example;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -35,13 +34,11 @@ public class MainActivity extends ActionBarActivity {
                 .setListener(new Response.Listener<Feed>() {
                     @Override
                     public void onResponse(Feed response) {
-                        Log.d("TAG", "success:" + response);
                     }
                 })
                 .setErrorListener(new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("TAG", "failure:" + error);
                     }
                 })
                 .build();

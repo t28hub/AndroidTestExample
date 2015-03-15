@@ -20,7 +20,7 @@ public class FeedParser implements Parser<Feed> {
     private static final String FEED = "feed";
     private static final String TITLE = "title";
     private static final String AUTHOR = "author";
-    private static final String DESCRIPTION = "";
+    private static final String DESCRIPTION = "description";
     private static final String FEED_URL = "feedUrl";
     private static final String LINK_URL = "link";
     private static final String ENTRIES = "entries";
