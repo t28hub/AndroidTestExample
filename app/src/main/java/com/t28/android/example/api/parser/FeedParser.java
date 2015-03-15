@@ -10,6 +10,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class FeedParser implements Parser<Feed> {
     private static final String RESPONSE_DATA = "responseData";
     private static final String FEED = "feed";
@@ -19,6 +24,13 @@ public class FeedParser implements Parser<Feed> {
     private static final String FEED_URL = "feedUrl";
     private static final String LINK_URL = "link";
     private static final String ENTRIES = "entries";
+    private static final String ENTRY_TITLE = "title";
+    private static final String ENTRY_CONTENT = "content";
+    private static final String ENTRY_CONTENT_SNIPPET = "contentSnippet";
+    private static final String ENTRY_URL = "link";
+    private static final String ENTRY_PUBLISHED_DATE = "publishedDate";
+    private static final String ENTRY_CATEGORIES = "categories";
+    private static final String FORMAT_PUBLISHED_DATE = "EEE, dd MMM yyyy HH:mm:ss Z";
 
     public FeedParser() {
         // TODO: Jackson対応
@@ -35,7 +47,7 @@ public class FeedParser implements Parser<Feed> {
         }
     }
 
-    private Feed parseFeed(JSONObject feed) throws JSONException {
+    private Feed parseFeed(JSONObject feed) throws JSONException, ParseException {
         final Feed.Builder builder = new Feed.Builder();
         builder.setTitle(feed.getString(TITLE))
                 .setAuthor(feed.getString(AUTHOR))
@@ -57,7 +69,34 @@ public class FeedParser implements Parser<Feed> {
         return builder.build();
     }
 
-    private Entry parseEntry(JSONObject entry) {
-        return new Entry();
+    private Entry parseEntry(JSONObject entry) throws JSONException, ParseException {
+        final Entry.Builder builder = new Entry.Builder();
+        builder.setTitle(entry.getString(ENTRY_TITLE))
+                .setContent(entry.getString(ENTRY_CONTENT))
+                .setContentSnippet(entry.getString(ENTRY_CONTENT_SNIPPET));
+
+        final String url = entry.getString(ENTRY_URL);
+        builder.setUrl(Uri.parse(url));
+
+        final String publishedDate = entry.getString(ENTRY_PUBLISHED_DATE);
+        builder.setPublishedDate(parsePublishedDate(publishedDate));
+
+        final JSONArray categories = entry.getJSONArray(ENTRY_CATEGORIES);
+        final int categoryLimit = categories.length();
+        for (int index = 0; index < categoryLimit; index++) {
+            final String category = categories.getString(index);
+            builder.addCategory(category);
+        }
+
+        return builder.build();
+    }
+
+    private Date parsePublishedDate(String publishedDate) throws ParseException {
+        final DateFormat dateFormat = new SimpleDateFormat(FORMAT_PUBLISHED_DATE, Locale.getDefault());
+        try {
+            return dateFormat.parse(publishedDate);
+        } catch (java.text.ParseException e) {
+            throw new ParseException(e);
+        }
     }
 }
