@@ -1,11 +1,12 @@
 package com.t28.android.example.data.model;
 
 import android.net.Uri;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Feed {
+public class Feed implements Model {
     private final String mTitle;
     private final String mAuthor;
     private final String mDescription;
@@ -17,17 +18,25 @@ public class Feed {
         mTitle = builder.mTitle;
         mAuthor = builder.mAuthor;
         mDescription = builder.mDescription;
-        if (builder.mUrl == null) {
-            mUrl = Uri.EMPTY;
-        } else {
-            mUrl = builder.mUrl.buildUpon().build();
-        }
-        if (builder.mLinkUrl == null) {
-            mLinkUrl = Uri.EMPTY;
-        } else {
-            mLinkUrl = builder.mLinkUrl.buildUpon().build();
-        }
+        mUrl = builder.mUrl;
+        mLinkUrl = builder.mLinkUrl;
         mEntries = new ArrayList<>(builder.mEntries);
+    }
+
+    @Override
+    public boolean isValid() {
+        if (TextUtils.isEmpty(mTitle)) {
+            return false;
+        }
+
+        if (mUrl == null || Uri.EMPTY.equals(mUrl)) {
+            return false;
+        }
+
+        if (mLinkUrl == null || Uri.EMPTY.equals(mLinkUrl)) {
+            return false;
+        }
+        return true;
     }
 
     public String getTitle() {

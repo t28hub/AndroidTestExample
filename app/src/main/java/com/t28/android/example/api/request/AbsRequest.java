@@ -8,8 +8,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.t28.android.example.api.parser.ParseException;
 import com.t28.android.example.api.parser.Parser;
+import com.t28.android.example.data.model.Model;
 
-public abstract class AbsRequest<T> extends Request<T> {
+public abstract class AbsRequest<T extends Model> extends Request<T> {
     private final Response.Listener<T> mListener;
 
     public AbsRequest(int method, String url, Response.Listener<T> listener, Response.ErrorListener errorListener) {
@@ -28,7 +29,7 @@ public abstract class AbsRequest<T> extends Request<T> {
         try {
             final Parser<T> parser = createParser();
             final T parsed = parser.parse(data);
-            if (parsed == null) {
+            if (parsed == null || !parsed.isValid()) {
                 throw new ParseException("Invalid parsed result:" + parsed);
             }
             return Response.success(parsed, createCache(response));
