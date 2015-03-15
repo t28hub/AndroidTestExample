@@ -42,7 +42,7 @@ task jacoco(type: JacocoReport, dependsOn: 'testDebug') {
         html.enabled = true
     }
     classDirectories = fileTree(
-            dir: './build/intermediates/classes/test/debug',
+            dir: './build/intermediates/classes/debug/com/t28/android',
             excludes: [
                     '**/R.class', '**/R$*.class', '**/BuildConfig.class'
             ])
