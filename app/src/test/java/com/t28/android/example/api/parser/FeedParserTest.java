@@ -90,4 +90,14 @@ public class FeedParserTest {
         // exercise
         parser.parse(data);
     }
+
+    @Test(expected = ParseException.class)
+    public void parse_shouldThrowExceptionWhenResponseIsEmpty() throws ParseException {
+        // setup
+        final byte[] data = "".getBytes();
+        final FeedParser parser = new FeedParser();
+
+        // exercise
+        parser.parse(data);
+    }
 }
