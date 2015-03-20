@@ -80,4 +80,14 @@ public class FeedParserTest {
         // verify
         assertThat(feed).isNotNull();
     }
+
+    @Test(expected = ParseException.class)
+    public void parse_shouldThrowExceptionWhenPublishedDateIsInvalid() throws IOException, ParseException {
+        // setup
+        final byte[] data = mAssetReader.read("feed_load_failure_invalid_published_date.json");
+        final FeedParser parser = new FeedParser();
+
+        // exercise
+        parser.parse(data);
+    }
 }
