@@ -7,18 +7,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 
-public class AssetsReader {
+public class AssetReader {
     private static final int END_OF_FILE = -1;
     private static final int DEFAULT_BUFFER_SIZE = 1024;
 
     private final AssetManager mManager;
     private final int mBufferSize;
 
-    public AssetsReader(AssetManager manager) {
+    public AssetReader(AssetManager manager) {
         this(manager, DEFAULT_BUFFER_SIZE);
     }
 
-    public AssetsReader(AssetManager manager, int bufferSize) {
+    public AssetReader(AssetManager manager, int bufferSize) {
         if (manager == null) {
             throw new NullPointerException("manager == null");
         }
