@@ -30,7 +30,7 @@ public class FeedParser implements Parser<Feed> {
     private static final String ENTRY_URL = "link";
     private static final String ENTRY_PUBLISHED_DATE = "publishedDate";
     private static final String ENTRY_CATEGORIES = "categories";
-    private static final String FORMAT_PUBLISHED_DATE = "EEE, dd MMM yyyy HH:mm:ss Z";
+    private static final String FORMAT_PUBLISHED_DATE = "EEE, d MMM yyyy HH:mm:ss Z";
 
     public FeedParser() {
         // TODO: Jackson対応
@@ -92,7 +92,8 @@ public class FeedParser implements Parser<Feed> {
     }
 
     private Date parsePublishedDate(String publishedDate) throws ParseException {
-        final DateFormat dateFormat = new SimpleDateFormat(FORMAT_PUBLISHED_DATE, Locale.getDefault());
+        final DateFormat dateFormat = new SimpleDateFormat(FORMAT_PUBLISHED_DATE, Locale.ENGLISH);
+        dateFormat.setLenient(false);
         try {
             return dateFormat.parse(publishedDate);
         } catch (java.text.ParseException e) {
