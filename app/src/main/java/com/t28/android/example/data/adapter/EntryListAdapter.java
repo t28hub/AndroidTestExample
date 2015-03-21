@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class EntryListAdapter extends RecyclerView.Adapter<EntryListAdapter.ItemViewHolder>{
+public class EntryListAdapter extends RecyclerView.Adapter<EntryListAdapter.ItemViewHolder> {
     private List<Entry> mEntries;
 
     public EntryListAdapter() {
