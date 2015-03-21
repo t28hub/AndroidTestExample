@@ -13,6 +13,9 @@ import com.t28.android.example.view.StatefulFrameLayout;
 
 public class EntryListFragment extends Fragment {
 
+    public EntryListFragment() {
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
