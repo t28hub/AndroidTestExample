@@ -62,30 +62,11 @@ public class StatefulFrameLayout extends FrameLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        detachViews(mLoadingView, mSuccessView, mFailureView);
-
         mLoadingView = findViewById(mLoadingLayoutId);
         mSuccessView = findViewById(mSuccessLayoutId);
         mFailureView = findViewById(mFailureLayoutId);
 
         changeState(mState);
-    }
-
-    private void checkViews(View... views) {
-        for (View view: views) {
-            if (view != null) {
-                continue;
-            }
-        }
-    }
-
-    private void detachViews(View... views) {
-        for (View view : views) {
-            if (view == null) {
-                continue;
-            }
-            removeView(view);
-        }
     }
 
     public static enum State {
