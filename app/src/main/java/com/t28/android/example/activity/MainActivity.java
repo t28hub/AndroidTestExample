@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends ActionBarActivity {
+    private static final String FEED_URL = "http://feeds.feedburner.com/hatena/b/hotentry";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +27,7 @@ public class MainActivity extends ActionBarActivity {
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(android.R.id.content, new EntryListFragment())
+                    .add(android.R.id.content, EntryListFragment.newInstance(FEED_URL))
                     .commit();
         }
     }
