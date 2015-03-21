@@ -11,6 +11,7 @@ import com.android.volley.VolleyError;
 import com.t28.android.example.R;
 import com.t28.android.example.api.request.FeedRequest;
 import com.t28.android.example.data.model.Feed;
+import com.t28.android.example.fragment.EntryListFragment;
 import com.t28.android.example.volley.VolleyHolder;
 
 import java.util.concurrent.TimeUnit;
@@ -22,6 +23,12 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (savedInstanceState == null) {
+            getFragmentManager().beginTransaction()
+                    .add(android.R.id.content, new EntryListFragment())
+                    .commit();
+        }
     }
 
     @Override

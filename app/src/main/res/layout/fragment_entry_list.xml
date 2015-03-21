@@ -5,7 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    app:failureLayout="@layout/layout_entry_list_failure"
-    app:loadingLayout="@layout/layout_entry_list_loading"
-    app:successLayout="@layout/layout_entry_list_success"
-    />
+    app:failureLayout="@+id/entry_list_failure"
+    app:loadingLayout="@+id/entry_list_loading"
+    app:successLayout="@+id/entry_list_success"
+    >
+
+    <include
+        android:id="@id/entry_list_loading"
+        layout="@layout/layout_entry_list_loading"
+        />
+
+    <include
+        android:id="@id/entry_list_success"
+        layout="@layout/layout_entry_list_success"
+        />
+
+    <include
+        android:id="@id/entry_list_failure"
+        layout="@layout/layout_entry_list_failure"
+        />
+
+</com.t28.android.example.view.StatefulFrameLayout>

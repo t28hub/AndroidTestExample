@@ -3,7 +3,6 @@ package com.t28.android.example.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -12,24 +11,27 @@ import com.t28.android.example.R;
 public class StatefulFrameLayout extends FrameLayout {
     private static final int DEFAULT_STYLE_ATTR = 0;
 
-    private final AttributeSet mAttrs;
+    private final int mLoadingLayoutId;
+    private final int mSuccessLayoutId;
+    private final int mFailureLayoutId;
 
-    private State mState = State.SUCCESS;
+    private State mState;
     private View mLoadingView;
     private View mSuccessView;
     private View mFailureView;
 
     public StatefulFrameLayout(Context context) {
-        this(context, null, DEFAULT_STYLE_ATTR);
+        this(context, null);
     }
 
     public StatefulFrameLayout(Context context, AttributeSet attrs) {
-        this(context, attrs, DEFAULT_STYLE_ATTR);
-    }
+        super(context, attrs);
 
-    public StatefulFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        mAttrs = attrs;
+        final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.StatefulFrameLayout);
+        mLoadingLayoutId = typedArray.getResourceId(R.styleable.StatefulFrameLayout_loadingLayout, View.NO_ID);
+        mSuccessLayoutId = typedArray.getResourceId(R.styleable.StatefulFrameLayout_successLayout, View.NO_ID);
+        mFailureLayoutId = typedArray.getResourceId(R.styleable.StatefulFrameLayout_failureLayout, View.NO_ID);
+        typedArray.recycle();
     }
 
     public State getState() {
@@ -62,17 +64,19 @@ public class StatefulFrameLayout extends FrameLayout {
 
         detachViews(mLoadingView, mSuccessView, mFailureView);
 
-        final Context context = getContext();
-        final TypedArray typedArray = context.obtainStyledAttributes(mAttrs, R.styleable.StatefulFrameLayout);
-        final int loadingLayoutId = typedArray.getResourceId(R.styleable.StatefulFrameLayout_loadingLayout, View.NO_ID);
-        final int successLayoutId = typedArray.getResourceId(R.styleable.StatefulFrameLayout_successLayout, View.NO_ID);
-        final int failureLayoutId = typedArray.getResourceId(R.styleable.StatefulFrameLayout_failureLayout, View.NO_ID);
-        typedArray.recycle();
+        mLoadingView = findViewById(mLoadingLayoutId);
+        mSuccessView = findViewById(mSuccessLayoutId);
+        mFailureView = findViewById(mFailureLayoutId);
 
-        final LayoutInflater inflater = LayoutInflater.from(context);
-        mLoadingView = inflater.inflate(loadingLayoutId, this, true);
-        mSuccessView = inflater.inflate(successLayoutId, this, true);
-        mFailureView = inflater.inflate(failureLayoutId, this, true);
+        changeState(mState);
+    }
+
+    private void checkViews(View... views) {
+        for (View view: views) {
+            if (view != null) {
+                continue;
+            }
+        }
     }
 
     private void detachViews(View... views) {
