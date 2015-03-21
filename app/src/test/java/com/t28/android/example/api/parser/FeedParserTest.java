@@ -3,6 +3,7 @@ package com.t28.android.example.api.parser;
 import android.content.Context;
 import android.os.Build;
 
+import com.fasterxml.jackson.core.JsonFactory;
 import com.t28.android.example.data.model.Feed;
 import com.t28.android.example.test.AssetReader;
 
@@ -30,12 +31,30 @@ public class FeedParserTest {
     }
 
     @Test
-    public void constructor_shouldReturnInstance() {
+    public void constructor_shouldReturnInstanceWithNoJsonFactory() {
         // exercise
         final Parser<Feed> parser = new FeedParser();
 
         // verify
         assertThat(parser).isNotNull();
+    }
+
+    @Test
+    public void constructor_shouldReturnInstanceWithJsonFactory() {
+        // setup
+        final JsonFactory factory = new JsonFactory();
+
+        // exercise
+        final Parser<Feed> parser = new FeedParser(factory);
+
+        // verify
+        assertThat(parser).isNotNull();
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void constructor_shouldThrowExceptionWhenJsonFactoryIsNull() {
+        // exercise
+        new FeedParser(null);
     }
 
     @Test
