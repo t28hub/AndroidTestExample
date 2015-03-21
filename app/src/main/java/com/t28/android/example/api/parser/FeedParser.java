@@ -68,7 +68,6 @@ public class FeedParser implements Parser<Feed> {
     }
 
     private Feed parseRoot() throws ParseException, IOException {
-        Feed feed = null;
         while (mParser.nextToken() != JsonToken.END_OBJECT) {
             final JsonToken token = mParser.getCurrentToken();
             final String name = mParser.getCurrentName();
@@ -76,13 +75,12 @@ public class FeedParser implements Parser<Feed> {
                 mParser.skipChildren();
                 continue;
             }
-            feed = parseResponseData();
+            return parseResponseData();
         }
-        return feed;
+        return null;
     }
 
     private Feed parseResponseData() throws IOException, ParseException {
-        Feed feed = null;
         while (mParser.nextToken() != JsonToken.END_OBJECT) {
             final JsonToken token = mParser.getCurrentToken();
             final String name = mParser.getCurrentName();
@@ -92,7 +90,7 @@ public class FeedParser implements Parser<Feed> {
             }
             return parseFeed();
         }
-        return feed;
+        return null;
     }
 
     private Feed parseFeed() throws IOException, ParseException {
@@ -113,19 +111,27 @@ public class FeedParser implements Parser<Feed> {
 
             if (TITLE.equals(name)) {
                 builder.setTitle(mParser.getText());
-            } else if (AUTHOR.equals(name)) {
+                continue;
+            }
+            if (AUTHOR.equals(name)) {
                 builder.setAuthor(mParser.getText());
-            } else if (DESCRIPTION.equals(name)) {
+                continue;
+            }
+            if (DESCRIPTION.equals(name)) {
                 builder.setDescription(mParser.getText());
-            } else if (FEED_URL.equals(name)) {
+                continue;
+            }
+            if (FEED_URL.equals(name)) {
                 final Uri feedUrl = Uri.parse(mParser.getText());
                 builder.setUrl(feedUrl);
-            } else if (LINK_URL.equals(name)) {
+                continue;
+            }
+            if (LINK_URL.equals(name)) {
                 final Uri linkUrl = Uri.parse(mParser.getText());
                 builder.setLinkUrl(linkUrl);
-            } else {
-                mParser.skipChildren();
+                continue;
             }
+            mParser.skipChildren();
         }
         return builder.build();
     }
@@ -163,18 +169,26 @@ public class FeedParser implements Parser<Feed> {
 
             if (ENTRY_TITLE.equals(name)) {
                 builder.setTitle(mParser.getText());
-            } else if (ENTRY_CONTENT.equals(name)) {
+                continue;
+            }
+            if (ENTRY_CONTENT.equals(name)) {
                 builder.setContent(mParser.getText());
-            } else if (ENTRY_CONTENT_SNIPPET.equals(name)) {
+                continue;
+            }
+            if (ENTRY_CONTENT_SNIPPET.equals(name)) {
                 builder.setContentSnippet(mParser.getText());
-            } else if (ENTRY_URL.equals(name)) {
+                continue;
+            }
+            if (ENTRY_URL.equals(name)) {
                 builder.setUrl(Uri.parse(mParser.getText()));
-            } else if (ENTRY_PUBLISHED_DATE.equals(name)) {
+                continue;
+            }
+            if (ENTRY_PUBLISHED_DATE.equals(name)) {
                 final String publishedDate = mParser.getText();
                 builder.setPublishedDate(parsePublishedDate(publishedDate));
-            } else {
-                mParser.skipChildren();
+                continue;
             }
+            mParser.skipChildren();
         }
         return builder.build();
     }
