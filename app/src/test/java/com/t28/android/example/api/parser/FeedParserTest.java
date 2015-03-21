@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
 import com.t28.android.example.data.model.Feed;
 import com.t28.android.example.test.AssetReader;
 
@@ -17,6 +18,9 @@ import org.robolectric.annotation.Config;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @Config(emulateSdk = Build.VERSION_CODES.JELLY_BEAN_MR2, manifest = "src/test/AndroidManifest.xml")
 @RunWith(RobolectricTestRunner.class)
@@ -134,6 +138,22 @@ public class FeedParserTest {
         // setup
         final byte[] data = "[]".getBytes();
         final FeedParser parser = new FeedParser();
+
+        // exercise
+        parser.parse(data);
+    }
+
+    @Test(expected = ParseException.class)
+    public void parse_shouldThrowExceptionWhenJsonParserThrowsException() throws ParseException, IOException {
+        // setup
+        final JsonParser jsonParser = mock(JsonParser.class);
+        when(jsonParser.nextToken()).thenThrow(new IOException());
+
+        final JsonFactory jsonFactory = mock(JsonFactory.class);
+        when(jsonFactory.createParser(any(byte[].class))).thenReturn(jsonParser);
+
+        final byte[] data = mAssetReader.read("feed_load_success_0.json");
+        final Parser<Feed> parser = new FeedParser(jsonFactory);
 
         // exercise
         parser.parse(data);
