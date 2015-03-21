@@ -88,11 +88,13 @@ public class EntryListFragment extends Fragment {
                 .setListener(new Response.Listener<Feed>() {
                     @Override
                     public void onResponse(Feed response) {
+                        getLayout().changeState(StatefulFrameLayout.State.SUCCESS);
                     }
                 })
                 .setErrorListener(new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        getLayout().changeState(StatefulFrameLayout.State.FAILURE);
                     }
                 })
                 .build();
