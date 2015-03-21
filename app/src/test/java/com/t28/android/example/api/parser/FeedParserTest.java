@@ -30,6 +30,15 @@ public class FeedParserTest {
     }
 
     @Test
+    public void constructor_shouldReturnInstance() {
+        // exercise
+        final Parser<Feed> parser = new FeedParser();
+
+        // verify
+        assertThat(parser).isNotNull();
+    }
+
+    @Test
     public void parse_shouldReturnFeedWhenResponseHasNoEntry() throws IOException, ParseException {
         // setup
         final byte[] data = mAssetReader.read("feed_load_success_0.json");
