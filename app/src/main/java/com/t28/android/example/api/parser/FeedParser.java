@@ -3,6 +3,7 @@ package com.t28.android.example.api.parser;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import com.fasterxml.jackson.core.JsonFactory;
 import com.t28.android.example.data.model.Entry;
 import com.t28.android.example.data.model.Feed;
 
@@ -32,8 +33,17 @@ public class FeedParser implements Parser<Feed> {
     private static final String ENTRY_CATEGORIES = "categories";
     private static final String FORMAT_PUBLISHED_DATE = "EEE, d MMM yyyy HH:mm:ss Z";
 
+    private final JsonFactory mFactory;
+
     public FeedParser() {
-        // TODO: Jackson対応
+        this(new JsonFactory());
+    }
+
+    public FeedParser(JsonFactory factory) {
+        if (factory == null) {
+            throw new NullPointerException("factory == null");
+        }
+        mFactory = factory;
     }
 
     @Override
