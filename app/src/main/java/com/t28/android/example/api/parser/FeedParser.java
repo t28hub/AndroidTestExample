@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.t28.android.example.data.model.Entry;
 import com.t28.android.example.data.model.Feed;
+import com.t28.android.example.util.IoUtils;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -63,7 +64,7 @@ public class FeedParser implements Parser<Feed> {
         } catch (IOException e) {
             throw new ParseException(e);
         } finally {
-            releaseParser();
+            IoUtils.close(mParser);
         }
     }
 
@@ -215,17 +216,5 @@ public class FeedParser implements Parser<Feed> {
             categories.add(mParser.getText());
         }
         return categories;
-    }
-
-    private void releaseParser() {
-        if (mParser == null) {
-            return;
-        }
-
-        try {
-            mParser.close();
-        } catch (IOException ignore) {
-            mParser = null;
-        }
     }
 }

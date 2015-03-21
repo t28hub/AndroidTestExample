@@ -2,9 +2,10 @@ package com.t28.android.example.test;
 
 import android.content.res.AssetManager;
 
+import com.t28.android.example.util.IoUtils;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
 import java.io.IOException;
 
 public class AssetReader {
@@ -41,15 +42,8 @@ public class AssetReader {
             }
             return output.toByteArray();
         } finally {
-            close(input);
-            close(output);
+            IoUtils.close(input);
+            IoUtils.close(output);
         }
-    }
-
-    private void close(Closeable closeable) throws IOException {
-        if (closeable == null) {
-            return;
-        }
-        closeable.close();
     }
 }
