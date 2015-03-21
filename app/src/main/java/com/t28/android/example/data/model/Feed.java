@@ -101,6 +101,11 @@ public class Feed implements Model {
             return this;
         }
 
+        public Builder addEntries(List<Entry> entries) {
+            mEntries.addAll(entries);
+            return this;
+        }
+
         public Builder addEntry(Entry entry) {
             mEntries.add(entry);
             return this;

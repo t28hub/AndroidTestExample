@@ -4,17 +4,20 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
 import com.t28.android.example.data.model.Entry;
 import com.t28.android.example.data.model.Feed;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 public class FeedParser implements Parser<Feed> {
     private static final String RESPONSE_DATA = "responseData";
@@ -35,6 +38,8 @@ public class FeedParser implements Parser<Feed> {
 
     private final JsonFactory mFactory;
 
+    private JsonParser mParser;
+
     public FeedParser() {
         this(new JsonFactory());
     }
@@ -49,55 +54,128 @@ public class FeedParser implements Parser<Feed> {
     @Override
     public Feed parse(@NonNull byte[] data) throws ParseException {
         try {
-            final JSONObject root = new JSONObject(new String(data));
-            final JSONObject responseData = root.getJSONObject(RESPONSE_DATA);
-            return parseFeed(responseData.getJSONObject(FEED));
-        } catch (JSONException e) {
+            mParser = mFactory.createParser(data);
+            if (mParser.nextToken() != JsonToken.START_OBJECT) {
+                final JsonToken token = mParser.getCurrentToken();
+                throw new ParseException("Unexpected JSON token:" + token);
+            }
+            return parseRoot();
+        } catch (IOException e) {
             throw new ParseException(e);
+        } finally {
+            releaseParser();
         }
     }
 
-    private Feed parseFeed(JSONObject feed) throws JSONException, ParseException {
-        final Feed.Builder builder = new Feed.Builder();
-        builder.setTitle(feed.getString(TITLE))
-                .setAuthor(feed.getString(AUTHOR))
-                .setDescription(feed.getString(DESCRIPTION));
-
-        final String feedUrl = feed.getString(FEED_URL);
-        builder.setUrl(Uri.parse(feedUrl));
-
-        final String linkUrl = feed.getString(LINK_URL);
-        builder.setLinkUrl(Uri.parse(linkUrl));
-
-        final JSONArray entries = feed.getJSONArray(ENTRIES);
-        final int entryLimit = entries.length();
-        for (int index = 0; index < entryLimit; index++) {
-            final JSONObject entry = entries.getJSONObject(index);
-            builder.addEntry(parseEntry(entry));
+    private Feed parseRoot() throws ParseException, IOException {
+        Feed feed = null;
+        while (mParser.nextToken() != JsonToken.END_OBJECT) {
+            final JsonToken token = mParser.getCurrentToken();
+            final String name = mParser.getCurrentName();
+            if (token != JsonToken.START_OBJECT || !RESPONSE_DATA.equals(name)) {
+                mParser.skipChildren();
+                continue;
+            }
+            feed = parseResponseData();
         }
+        return feed;
+    }
 
+    private Feed parseResponseData() throws IOException, ParseException {
+        Feed feed = null;
+        while (mParser.nextToken() != JsonToken.END_OBJECT) {
+            final JsonToken token = mParser.getCurrentToken();
+            final String name = mParser.getCurrentName();
+            if (token != JsonToken.START_OBJECT || !FEED.equals(name)) {
+                mParser.skipChildren();
+                continue;
+            }
+            return parseFeed();
+        }
+        return feed;
+    }
+
+    private Feed parseFeed() throws IOException, ParseException {
+        final Feed.Builder builder = new Feed.Builder();
+        while (mParser.nextToken() != JsonToken.END_OBJECT) {
+            final JsonToken token = mParser.getCurrentToken();
+            final String name = mParser.getCurrentName();
+            if (token == JsonToken.START_ARRAY && ENTRIES.equals(name)) {
+                final List<Entry> entries = parseEntries();
+                builder.addEntries(entries);
+                continue;
+            }
+
+            if (token != JsonToken.VALUE_STRING) {
+                mParser.skipChildren();
+                continue;
+            }
+
+            if (TITLE.equals(name)) {
+                builder.setTitle(mParser.getText());
+            } else if (AUTHOR.equals(name)) {
+                builder.setAuthor(mParser.getText());
+            } else if (DESCRIPTION.equals(name)) {
+                builder.setDescription(mParser.getText());
+            } else if (FEED_URL.equals(name)) {
+                final Uri feedUrl = Uri.parse(mParser.getText());
+                builder.setUrl(feedUrl);
+            } else if (LINK_URL.equals(name)) {
+                final Uri linkUrl = Uri.parse(mParser.getText());
+                builder.setLinkUrl(linkUrl);
+            } else {
+                mParser.skipChildren();
+            }
+        }
         return builder.build();
     }
 
-    private Entry parseEntry(JSONObject entry) throws JSONException, ParseException {
-        final Entry.Builder builder = new Entry.Builder();
-        builder.setTitle(entry.getString(ENTRY_TITLE))
-                .setContent(entry.getString(ENTRY_CONTENT))
-                .setContentSnippet(entry.getString(ENTRY_CONTENT_SNIPPET));
+    private List<Entry> parseEntries() throws IOException, ParseException {
+        final List<Entry> entries = new ArrayList<>();
+        while (mParser.nextToken() != JsonToken.END_ARRAY) {
+            final JsonToken token = mParser.getCurrentToken();
+            if (token != JsonToken.START_OBJECT) {
+                mParser.skipChildren();
+                continue;
+            }
 
-        final String url = entry.getString(ENTRY_URL);
-        builder.setUrl(Uri.parse(url));
-
-        final String publishedDate = entry.getString(ENTRY_PUBLISHED_DATE);
-        builder.setPublishedDate(parsePublishedDate(publishedDate));
-
-        final JSONArray categories = entry.getJSONArray(ENTRY_CATEGORIES);
-        final int categoryLimit = categories.length();
-        for (int index = 0; index < categoryLimit; index++) {
-            final String category = categories.getString(index);
-            builder.addCategory(category);
+            final Entry entry = parseEntry();
+            entries.add(entry);
         }
+        return entries;
+    }
 
+    private Entry parseEntry() throws IOException, ParseException {
+        final Entry.Builder builder = new Entry.Builder();
+        while (mParser.nextToken() != JsonToken.END_OBJECT) {
+            final JsonToken token = mParser.getCurrentToken();
+            final String name = mParser.getCurrentName();
+            if (token == JsonToken.START_ARRAY && ENTRY_CATEGORIES.equals(name)) {
+                final Set<String> categories = parseCategories();
+                builder.addCategories(categories);
+                continue;
+            }
+
+            if (token != JsonToken.VALUE_STRING) {
+                mParser.skipChildren();
+                continue;
+            }
+
+            if (ENTRY_TITLE.equals(name)) {
+                builder.setTitle(mParser.getText());
+            } else if (ENTRY_CONTENT.equals(name)) {
+                builder.setContent(mParser.getText());
+            } else if (ENTRY_CONTENT_SNIPPET.equals(name)) {
+                builder.setContentSnippet(mParser.getText());
+            } else if (ENTRY_URL.equals(name)) {
+                builder.setUrl(Uri.parse(mParser.getText()));
+            } else if (ENTRY_PUBLISHED_DATE.equals(name)) {
+                final String publishedDate = mParser.getText();
+                builder.setPublishedDate(parsePublishedDate(publishedDate));
+            } else {
+                mParser.skipChildren();
+            }
+        }
         return builder.build();
     }
 
@@ -108,6 +186,32 @@ public class FeedParser implements Parser<Feed> {
             return dateFormat.parse(publishedDate);
         } catch (java.text.ParseException e) {
             throw new ParseException(e);
+        }
+    }
+
+    private Set<String> parseCategories() throws IOException {
+        final Set<String> categories = new HashSet<>();
+        while (mParser.nextToken() != JsonToken.END_ARRAY) {
+            final JsonToken token = mParser.getCurrentToken();
+            if (token != JsonToken.VALUE_STRING) {
+                mParser.skipChildren();
+                continue;
+            }
+
+            categories.add(mParser.getText());
+        }
+        return categories;
+    }
+
+    private void releaseParser() {
+        if (mParser == null) {
+            return;
+        }
+
+        try {
+            mParser.close();
+        } catch (IOException ignore) {
+            mParser = null;
         }
     }
 }

@@ -114,6 +114,11 @@ public class Entry implements Model {
             return this;
         }
 
+        public Builder addCategories(Set<String> categories) {
+            mCategories.addAll(categories);
+            return this;
+        }
+
         public Builder addCategory(String category) {
             mCategories.add(category);
             return this;
