@@ -15,7 +15,7 @@ public class StatefulFrameLayout extends FrameLayout {
     private final int mSuccessLayoutId;
     private final int mFailureLayoutId;
 
-    private State mState;
+    private State mState = State.SUCCESS;
     private View mLoadingView;
     private View mSuccessView;
     private View mFailureView;
@@ -70,7 +70,7 @@ public class StatefulFrameLayout extends FrameLayout {
         mSuccessView = findViewById(mSuccessLayoutId);
         mFailureView = findViewById(mFailureLayoutId);
 
-        changeState(State.SUCCESS);
+        mState.apply(this);
     }
 
     public static enum State {
