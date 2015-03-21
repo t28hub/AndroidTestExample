@@ -22,14 +22,16 @@ import java.util.concurrent.TimeUnit;
 
 public class EntryListFragment extends Fragment {
     private static final String EXTRA_FEED_URL = "feed_url";
+    private static final String EXTRA_ENTRY_COUNT = "entry_count";
 
     private String mFeedUrl;
+    private int mEntryCount;
     private Request mFeedRequest;
 
     /**
      * コンストラクタ
      *
-     * @see #newInstance(String)
+     * @see #newInstance(String, int)
      */
     public EntryListFragment() {
     }
@@ -41,6 +43,7 @@ public class EntryListFragment extends Fragment {
         final Bundle arguments = getArguments();
         if (arguments != null) {
             mFeedUrl = arguments.getString(EXTRA_FEED_URL);
+            mEntryCount = arguments.getInt(EXTRA_ENTRY_COUNT);
         }
     }
 
@@ -79,7 +82,7 @@ public class EntryListFragment extends Fragment {
 
     private void refresh() {
         mFeedRequest = new FeedRequest.Builder(mFeedUrl)
-                .setNumber(100)
+                .setNumber(mEntryCount)
                 .setSoftTimeToLive(TimeUnit.MINUTES.toMillis(10))
                 .setTimeToLive(TimeUnit.HOURS.toMillis(1))
                 .setListener(new Response.Listener<Feed>() {
@@ -113,13 +116,15 @@ public class EntryListFragment extends Fragment {
     /**
      * インスタンスを生成する
      *
-     * @param feedUrl 表示するフィードのURL
+     * @param feedUrl    表示するフィードのURL
+     * @param entryCount 取得するエントリー数
      * @return インスタンス
      */
-    public static EntryListFragment newInstance(String feedUrl) {
+    public static EntryListFragment newInstance(String feedUrl, int entryCount) {
         final EntryListFragment instance = new EntryListFragment();
         final Bundle arguments = new Bundle();
         arguments.putString(EXTRA_FEED_URL, feedUrl);
+        arguments.putInt(EXTRA_ENTRY_COUNT, entryCount);
         instance.setArguments(arguments);
         return instance;
     }

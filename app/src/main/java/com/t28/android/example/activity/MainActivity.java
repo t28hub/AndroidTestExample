@@ -11,6 +11,7 @@ import com.t28.android.example.fragment.EntryListFragment;
 
 public class MainActivity extends ActionBarActivity {
     private static final String FEED_URL = "http://feeds.feedburner.com/hatena/b/hotentry";
+    private static final int ENTRY_COUNT = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +20,7 @@ public class MainActivity extends ActionBarActivity {
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(android.R.id.content, EntryListFragment.newInstance(FEED_URL))
+                    .add(android.R.id.content, EntryListFragment.newInstance(FEED_URL, ENTRY_COUNT))
                     .commit();
         }
     }
