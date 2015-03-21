@@ -9,7 +9,7 @@ import android.widget.FrameLayout;
 import com.t28.android.example.R;
 
 public class StatefulFrameLayout extends FrameLayout {
-    private static final int DEFAULT_STYLE_ATTR = 0;
+    private static final int NO_DEFAULT_STYLE_ATTR = 0;
 
     private final int mLoadingLayoutId;
     private final int mSuccessLayoutId;
@@ -21,11 +21,15 @@ public class StatefulFrameLayout extends FrameLayout {
     private View mFailureView;
 
     public StatefulFrameLayout(Context context) {
-        this(context, null);
+        this(context, null, NO_DEFAULT_STYLE_ATTR);
     }
 
     public StatefulFrameLayout(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, NO_DEFAULT_STYLE_ATTR);
+    }
+
+    public StatefulFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
 
         final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.StatefulFrameLayout);
         mLoadingLayoutId = typedArray.getResourceId(R.styleable.StatefulFrameLayout_loadingLayout, View.NO_ID);
