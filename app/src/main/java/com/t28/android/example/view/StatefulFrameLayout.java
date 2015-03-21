@@ -70,7 +70,7 @@ public class StatefulFrameLayout extends FrameLayout {
         mSuccessView = findViewById(mSuccessLayoutId);
         mFailureView = findViewById(mFailureLayoutId);
 
-        changeState(mState);
+        changeState(State.SUCCESS);
     }
 
     public static enum State {
