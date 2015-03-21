@@ -1,6 +1,7 @@
 package com.t28.android.example.fragment;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,13 +18,14 @@ import com.android.volley.VolleyError;
 import com.t28.android.example.R;
 import com.t28.android.example.api.request.FeedRequest;
 import com.t28.android.example.data.adapter.EntryListAdapter;
+import com.t28.android.example.data.model.Entry;
 import com.t28.android.example.data.model.Feed;
 import com.t28.android.example.view.StatefulFrameLayout;
 import com.t28.android.example.volley.VolleyHolder;
 
 import java.util.concurrent.TimeUnit;
 
-public class EntryListFragment extends Fragment {
+public class EntryListFragment extends Fragment implements EntryListAdapter.OnEntryClickListener {
     private static final String EXTRA_FEED_URL = "feed_url";
     private static final String EXTRA_ENTRY_COUNT = "entry_count";
 
@@ -59,6 +61,7 @@ public class EntryListFragment extends Fragment {
         entryListView.setLayoutManager(new LinearLayoutManager(container.getContext()));
 
         mEntryListAdapter = new EntryListAdapter();
+        mEntryListAdapter.setOnEntryClickListener(this);
         entryListView.setAdapter(mEntryListAdapter);
         return layout;
     }
@@ -78,6 +81,13 @@ public class EntryListFragment extends Fragment {
     public void onPause() {
         super.onPause();
         cancel();
+    }
+
+    @Override
+    public void onEntryClick(Entry entry) {
+        final Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(entry.getUrl());
+        getActivity().startActivity(intent);
     }
 
     private boolean isRefreshNeeded() {
