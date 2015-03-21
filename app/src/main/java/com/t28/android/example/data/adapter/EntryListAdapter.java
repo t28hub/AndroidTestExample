@@ -15,6 +15,7 @@ import java.util.List;
 
 public class EntryListAdapter extends RecyclerView.Adapter<EntryListAdapter.ItemViewHolder> {
     private List<Entry> mEntries;
+    private OnEntryClickListener mEntryClickListener;
 
     public EntryListAdapter() {
         super();
@@ -39,6 +40,10 @@ public class EntryListAdapter extends RecyclerView.Adapter<EntryListAdapter.Item
         return mEntries.size();
     }
 
+    public void setOnEntryClickListener(OnEntryClickListener listener) {
+        mEntryClickListener = listener;
+    }
+
     public void changeEntries(List<Entry> entries) {
         if (entries == null) {
             mEntries = Collections.emptyList();
@@ -48,12 +53,27 @@ public class EntryListAdapter extends RecyclerView.Adapter<EntryListAdapter.Item
         notifyDataSetChanged();
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
+    public interface OnEntryClickListener {
+        void onEntryClick(Entry entry);
+    }
+
+    public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView mTitleView;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             mTitleView = (TextView) itemView.findViewById(R.id.entry_list_item_title);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mEntryClickListener == null) {
+                return;
+            }
+
+            final Entry entry = mEntries.get(getAdapterPosition());
+            mEntryClickListener.onEntryClick(entry);
         }
 
         public void bind(Entry entry) {
