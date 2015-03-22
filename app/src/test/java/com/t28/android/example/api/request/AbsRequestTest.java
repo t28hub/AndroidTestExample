@@ -2,9 +2,13 @@ package com.t28.android.example.api.request;
 
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.t28.android.example.api.parser.ParseException;
 import com.t28.android.example.api.parser.Parser;
 import com.t28.android.example.data.model.Model;
 
@@ -27,7 +31,7 @@ public class AbsRequestTest {
     @Test
     public void constructor_shouldReturnInstance() {
         // exercise
-        final AbsRequest request = new TestAbsRequest(Request.Method.GET, URL, null, null);
+        final AbsRequest request = new UserRequest(Request.Method.GET, URL, null, null);
 
         // verify
         assertThat(request).isNotNull();
@@ -100,24 +104,65 @@ public class AbsRequestTest {
                 .hasNoQueryParameter("empty");
     }
 
-    public static class TestModel implements Model {
+    @Test
+    public void parseNetworkResponse_shouldReturnErrorResponseWhenResponseBodyIsNull() {
+        // setup
+        final NetworkResponse networkResponse = new NetworkResponse(null);
+        final AbsRequest<User> request = new UserRequest(Request.Method.GET, URL, null, null);
+
+        // exercise
+        final Response<User> response = request.parseNetworkResponse(networkResponse);
+    }
+
+    @Test
+    public void parseNetworkResponse_shouldReturnErrorResponseWhenResponseBodyIsEmpty() {
+        // setup
+        final NetworkResponse networkResponse = new NetworkResponse("".getBytes());
+        final AbsRequest<User> request = new UserRequest(Request.Method.GET, URL, null, null);
+
+        // exercise
+        final Response<User> response = request.parseNetworkResponse(networkResponse);
+    }
+
+    public static class User implements Model {
+        private final String mName;
+
+        public User(String name) {
+            mName = name;
+        }
 
         @Override
         public boolean isValid() {
-            return true;
+            return !TextUtils.isEmpty(name);
+        }
+
+        public String getName() {
+            return mName;
         }
     }
 
-    public static class TestAbsRequest extends AbsRequest<TestModel> {
+    public static class UserParser implements Parser<User> {
 
-        public TestAbsRequest(int method, String url,Response.Listener<TestModel> listener,
-                              Response.ErrorListener errorListener) {
+        public UserParser() {
+        }
+
+        @Override
+        public User parse(@NonNull byte[] data) throws ParseException {
+            final String name = new String(data);
+            return new User(name);
+        }
+    }
+
+    public static class UserRequest extends AbsRequest<User> {
+
+        public UserRequest(int method, String url, Response.Listener<User> listener,
+                           Response.ErrorListener errorListener) {
             super(method, url, listener, errorListener);
         }
 
         @Override
-        protected Parser<TestModel> createParser() {
-            return null;
+        protected Parser<User> createParser() {
+            return new UserParser();
         }
     }
 }
