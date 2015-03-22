@@ -232,6 +232,34 @@ public class AbsRequestTest {
         verifyZeroInteractions(mockedListener);
     }
 
+    @Test
+    public void getTimeToLive_shouldReturnZero() {
+        // setup
+        final AbsRequest<User> request = new UserRequest(Request.Method.GET, URL, null, null);
+
+        // exercise
+        final long timeToLive = request.getTimeToLive();
+
+        // verify
+        assertThat(timeToLive)
+                .overridingErrorMessage("Expected time to live 0 but was <%d>.", timeToLive)
+                .isZero();
+    }
+
+    @Test
+    public void getSoftTimeToLive_shouldReturnZero() {
+        // setup
+        final AbsRequest<User> request = new UserRequest(Request.Method.GET, URL, null, null);
+
+        // exercise
+        final long softTimeToLive = request.getSoftTimeToLive();
+
+        // verify
+        assertThat(softTimeToLive)
+                .overridingErrorMessage("Expected soft time to live 0 but was <%d>.", softTimeToLive)
+                .isZero();
+    }
+
     public static class User implements Model {
         private final String mName;
 
