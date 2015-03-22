@@ -80,7 +80,7 @@ public abstract class AbsRequest<T extends Model> extends Request<T> {
     private Cache.Entry createCache(NetworkResponse response) {
         final long timeToLive = getTimeToLive();
         final long softTimeToLive = getSoftTimeToLive();
-        if (timeToLive == NO_TIME_TO_LIVE && softTimeToLive == NO_TIME_TO_LIVE) {
+        if (timeToLive <= NO_TIME_TO_LIVE && softTimeToLive <= NO_TIME_TO_LIVE) {
             return null;
         }
 
