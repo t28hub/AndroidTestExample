@@ -32,6 +32,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+/**
+ * <code>{@link com.t28.android.example.api.request.AbsRequest}</code>のテスト
+ */
 @Config(emulateSdk = Build.VERSION_CODES.JELLY_BEAN_MR2, manifest = "src/test/AndroidManifest.xml")
 @RunWith(RobolectricTestRunner.class)
 public class AbsRequestTest {
