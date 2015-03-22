@@ -133,7 +133,7 @@ public class EntryListFragment extends Fragment implements EntryListAdapter.OnEn
     }
 
     private RequestQueue getRequestQueue() {
-        return VolleyHolder.getRequestQueue(getActivity());
+        return VolleyHolder.get().getRequestQueue(getActivity());
     }
 
     /**
