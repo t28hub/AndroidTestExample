@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 public abstract class AbsRequest<T extends Model> extends Request<T> {
+    private static final long NO_TIME_TO_LIVE = 0;
     private final Response.Listener<T> mListener;
 
     public AbsRequest(int method, String url, Response.Listener<T> listener, Response.ErrorListener errorListener) {
@@ -66,7 +67,28 @@ public abstract class AbsRequest<T extends Model> extends Request<T> {
         mListener.onResponse(response);
     }
 
+    protected long getTimeToLive() {
+        return NO_TIME_TO_LIVE;
+    }
+
+    protected long getSoftTimeToLive() {
+        return NO_TIME_TO_LIVE;
+    }
+
     protected abstract Parser<T> createParser();
 
-    protected abstract Cache.Entry createCache(NetworkResponse response);
+    private Cache.Entry createCache(NetworkResponse response) {
+        final long timeToLive = getTimeToLive();
+        final long softTimeToLive = getSoftTimeToLive();
+        if (timeToLive == NO_TIME_TO_LIVE && softTimeToLive == NO_TIME_TO_LIVE) {
+            return null;
+        }
+
+        final Cache.Entry entry = new Cache.Entry();
+        entry.data = response.data;
+        entry.responseHeaders = response.headers;
+        entry.ttl = timeToLive;
+        entry.softTtl = softTimeToLive;
+        return entry;
+    }
 }

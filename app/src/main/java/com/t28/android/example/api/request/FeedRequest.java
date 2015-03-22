@@ -2,8 +2,6 @@ package com.t28.android.example.api.request;
 
 import android.text.TextUtils;
 
-import com.android.volley.Cache;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.t28.android.example.api.parser.FeedParser;
 import com.t28.android.example.api.parser.Parser;
@@ -13,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FeedRequest extends AbsRequest<Feed> {
-    private static final long NO_TIME_TO_LIVE = 0;
     private static final String BASE_URL = "https://ajax.googleapis.com/ajax/services/feed/load";
 
     private final long mTimeToLive;
@@ -31,17 +28,13 @@ public class FeedRequest extends AbsRequest<Feed> {
     }
 
     @Override
-    protected Cache.Entry createCache(NetworkResponse response) {
-        if (mTimeToLive == NO_TIME_TO_LIVE && mSoftTimeToLive == NO_TIME_TO_LIVE) {
-            return null;
-        }
+    protected long getTimeToLive() {
+        return mTimeToLive;
+    }
 
-        final Cache.Entry entry = new Cache.Entry();
-        entry.data = response.data;
-        entry.responseHeaders = response.headers;
-        entry.ttl = mTimeToLive;
-        entry.softTtl = mSoftTimeToLive;
-        return entry;
+    @Override
+    protected long getSoftTimeToLive() {
+        return mSoftTimeToLive;
     }
 
     public static final class Builder {
