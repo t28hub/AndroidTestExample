@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -23,6 +24,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.t28.android.example.test.assertion.Assertions.assertThat;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 @Config(emulateSdk = Build.VERSION_CODES.JELLY_BEAN_MR2, manifest = "src/test/AndroidManifest.xml")
 @RunWith(RobolectricTestRunner.class)
@@ -150,6 +155,49 @@ public class AbsRequestTest {
         assertThat(response)
                 .hasNoResult()
                 .hasErrorInstanceOf(VolleyError.class);
+    }
+
+    @Test
+    public void parseNetworkResponse_shouldReturnErrorResponseWhenParserReturnsNull() throws ParseException {
+        // setup
+        final byte[] data = "android".getBytes();
+        final NetworkResponse networkResponse = new NetworkResponse(data);
+
+        final Parser<User> mockedParser = mock(UserParser.class);
+        when(mockedParser.parse(eq(data))).thenReturn(null);
+
+        final AbsRequest<User> spiedRequest = spy(new UserRequest(Request.Method.GET, URL, null, null));
+        when(spiedRequest.createParser()).thenReturn(mockedParser);
+
+        // exercise
+        final Response<User> response = spiedRequest.parseNetworkResponse(networkResponse);
+
+        // verify
+        assertThat(response)
+                .hasNoResult()
+                .hasErrorInstanceOf(ParseError.class);
+    }
+
+    @Test
+    public void parseNetworkResponse_shouldReturnErrorResponseWhenParserReturnsInvalidUser() throws ParseException {
+        // setup
+        final byte[] data = "android".getBytes();
+        final NetworkResponse networkResponse = new NetworkResponse(data);
+
+        final User invalidUser = new User("");
+        final Parser<User> mockedParser = mock(UserParser.class);
+        when(mockedParser.parse(eq(data))).thenReturn(invalidUser);
+
+        final AbsRequest<User> spiedRequest = spy(new UserRequest(Request.Method.GET, URL, null, null));
+        when(spiedRequest.createParser()).thenReturn(mockedParser);
+
+        // exercise
+        final Response<User> response = spiedRequest.parseNetworkResponse(networkResponse);
+
+        // verify
+        assertThat(response)
+                .hasNoResult()
+                .hasErrorInstanceOf(ParseError.class);
     }
 
     public static class User implements Model {
