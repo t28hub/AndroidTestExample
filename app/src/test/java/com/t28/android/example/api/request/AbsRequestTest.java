@@ -27,6 +27,8 @@ import static com.t28.android.example.test.assertion.Assertions.assertThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 @Config(emulateSdk = Build.VERSION_CODES.JELLY_BEAN_MR2, manifest = "src/test/AndroidManifest.xml")
@@ -198,6 +200,36 @@ public class AbsRequestTest {
         assertThat(response)
                 .hasNoResult()
                 .hasErrorInstanceOf(ParseError.class);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void deliverResponse_shouldCallOnResponseWhenListenerExists() {
+        // setup
+        final Response.Listener<User> mockedListener = mock(Response.Listener.class);
+        final AbsRequest<User> request = new UserRequest(Request.Method.GET, URL, mockedListener, null);
+        final User user = new User("android");
+
+        // exercise
+        request.deliverResponse(user);
+
+        // verify
+        verify(mockedListener).onResponse(eq(user));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void deliverResponse_shouldNotCallOnResponseWhenListenerDoesNotExist() {
+        // setup
+        final Response.Listener<User> mockedListener = mock(Response.Listener.class);
+        final AbsRequest<User> request = new UserRequest(Request.Method.GET, URL, null, null);
+        final User user = new User("android");
+
+        // exercise
+        request.deliverResponse(user);
+
+        // verify
+        verifyZeroInteractions(mockedListener);
     }
 
     public static class User implements Model {
