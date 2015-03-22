@@ -1,6 +1,5 @@
 package com.t28.android.example.api.request;
 
-import android.net.Uri;
 import android.text.TextUtils;
 
 import com.android.volley.Cache;
@@ -11,13 +10,12 @@ import com.t28.android.example.data.model.SearchResult;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class SearchRequest extends AbsRequest<SearchResult> {
     private static final String BASE_URL = "https://ajax.googleapis.com/ajax/services/feed/find";
 
     private SearchRequest(Builder builder) {
-        super(Method.GET, buildUrl(builder.mParams), builder.mListener, builder.mErrorListener);
+        super(Method.GET, buildUrl(BASE_URL, builder.mParams), builder.mListener, builder.mErrorListener);
     }
 
     @Override
@@ -28,19 +26,6 @@ public class SearchRequest extends AbsRequest<SearchResult> {
     @Override
     protected Cache.Entry createCache(NetworkResponse response) {
         return null;
-    }
-
-    private static String buildUrl(Map<String, String> params) {
-        final Uri.Builder urlBuilder = Uri.parse(BASE_URL).buildUpon();
-        final Set<Map.Entry<String, String>> entries = params.entrySet();
-        for (Map.Entry<String, String> entry : entries) {
-            final String value = entry.getValue();
-            if (TextUtils.isEmpty(value)) {
-                continue;
-            }
-            urlBuilder.appendQueryParameter(entry.getKey(), value);
-        }
-        return urlBuilder.build().toString();
     }
 
     public static final class Builder {

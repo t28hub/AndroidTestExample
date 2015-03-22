@@ -1,6 +1,5 @@
 package com.t28.android.example.api.request;
 
-import android.net.Uri;
 import android.text.TextUtils;
 
 import com.android.volley.Cache;
@@ -12,7 +11,6 @@ import com.t28.android.example.data.model.Feed;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class FeedRequest extends AbsRequest<Feed> {
     private static final long NO_TIME_TO_LIVE = 0;
@@ -22,7 +20,7 @@ public class FeedRequest extends AbsRequest<Feed> {
     private final long mSoftTimeToLive;
 
     private FeedRequest(Builder builder) {
-        super(Method.GET, buildUrl(builder.mParams), builder.mListener, builder.mErrorListener);
+        super(Method.GET, buildUrl(BASE_URL, builder.mParams), builder.mListener, builder.mErrorListener);
         mTimeToLive = builder.mTimeToLive;
         mSoftTimeToLive = builder.mSoftTimeToLive;
     }
@@ -44,19 +42,6 @@ public class FeedRequest extends AbsRequest<Feed> {
         entry.ttl = mTimeToLive;
         entry.softTtl = mSoftTimeToLive;
         return entry;
-    }
-
-    private static String buildUrl(Map<String, String> params) {
-        final Uri.Builder urlBuilder = Uri.parse(BASE_URL).buildUpon();
-        final Set<Map.Entry<String, String>> entries = params.entrySet();
-        for (Map.Entry<String, String> entry : entries) {
-            final String value = entry.getValue();
-            if (TextUtils.isEmpty(value)) {
-                continue;
-            }
-            urlBuilder.appendQueryParameter(entry.getKey(), value);
-        }
-        return urlBuilder.build().toString();
     }
 
     public static final class Builder {

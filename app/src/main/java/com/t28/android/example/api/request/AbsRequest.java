@@ -1,5 +1,8 @@
 package com.t28.android.example.api.request;
 
+import android.net.Uri;
+import android.text.TextUtils;
+
 import com.android.volley.Cache;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -10,12 +13,28 @@ import com.t28.android.example.api.parser.ParseException;
 import com.t28.android.example.api.parser.Parser;
 import com.t28.android.example.data.model.Model;
 
+import java.util.Map;
+import java.util.Set;
+
 public abstract class AbsRequest<T extends Model> extends Request<T> {
     private final Response.Listener<T> mListener;
 
     public AbsRequest(int method, String url, Response.Listener<T> listener, Response.ErrorListener errorListener) {
         super(method, url, errorListener);
         mListener = listener;
+    }
+
+    protected static String buildUrl(String baseUrl, Map<String, String> params) {
+        final Uri.Builder builder = Uri.parse(baseUrl).buildUpon();
+        final Set<Map.Entry<String, String>> entries = params.entrySet();
+        for (Map.Entry<String, String> entry : entries) {
+            final String value = entry.getValue();
+            if (TextUtils.isEmpty(value)) {
+                continue;
+            }
+            builder.appendQueryParameter(entry.getKey(), value);
+        }
+        return builder.build().toString();
     }
 
     @Override
