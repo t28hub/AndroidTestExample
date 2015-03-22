@@ -45,7 +45,7 @@ public class ResponseAssert<T> extends AbstractAssert<ResponseAssert<T>, Respons
                         type.getCanonicalName(),
                         actualError.getClass().getCanonicalName()
                 )
-                .hasCauseExactlyInstanceOf(type);
+                .isInstanceOf(type);
 
         return this;
     }
