@@ -133,7 +133,7 @@ public class AbsRequestTest {
 
         @Override
         public boolean isValid() {
-            return !TextUtils.isEmpty(name);
+            return !TextUtils.isEmpty(mName);
         }
 
         public String getName() {
