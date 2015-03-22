@@ -7,7 +7,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 
 public class VolleyHolder {
-    private static RequestQueueFactory sRequestQueueFactory = new DefaultRequestQueueFactory();
+    private static final RequestQueueFactory DEFAULT_REQUEST_QUEUE_FACTORY = new DefaultRequestQueueFactory();
+
+    private static RequestQueueFactory sRequestQueueFactory = DEFAULT_REQUEST_QUEUE_FACTORY;
     private static RequestQueue sRequestQueue;
     private static ImageLoader sImageLoader;
 
@@ -18,7 +20,7 @@ public class VolleyHolder {
         return InstanceHolder.INSTANCE;
     }
 
-    public static void setRequestQueueFactory(@NonNull RequestQueueFactory factory) {
+    public static void injectRequestQueueFactory(@NonNull RequestQueueFactory factory) {
         sRequestQueueFactory = factory;
     }
 
