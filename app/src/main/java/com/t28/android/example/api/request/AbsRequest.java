@@ -29,11 +29,12 @@ public abstract class AbsRequest<T extends Model> extends Request<T> {
         final Uri.Builder builder = Uri.parse(baseUrl).buildUpon();
         final Set<Map.Entry<String, String>> entries = params.entrySet();
         for (Map.Entry<String, String> entry : entries) {
+            final String key = entry.getKey();
             final String value = entry.getValue();
-            if (TextUtils.isEmpty(value)) {
+            if (TextUtils.isEmpty(key) || TextUtils.isEmpty(value)) {
                 continue;
             }
-            builder.appendQueryParameter(entry.getKey(), value);
+            builder.appendQueryParameter(key, value);
         }
         return builder.build().toString();
     }
