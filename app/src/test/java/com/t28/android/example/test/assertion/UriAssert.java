@@ -4,8 +4,6 @@ import android.net.Uri;
 
 import org.assertj.core.api.AbstractAssert;
 
-import java.util.Set;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UriAssert extends AbstractAssert<UriAssert, Uri> {
@@ -20,17 +18,6 @@ public class UriAssert extends AbstractAssert<UriAssert, Uri> {
         assertThat(actualScheme)
                 .overridingErrorMessage("Expected scheme <%s> but was <%s>.", scheme, actualScheme)
                 .isEqualTo(scheme);
-
-        return this;
-    }
-
-    public UriAssert hasAuthority(String authority) {
-        isNotNull();
-
-        final String actualAuthority = actual.getAuthority();
-        assertThat(actualAuthority)
-                .overridingErrorMessage("Expected authority <%s> but was <%s>.", authority, actualAuthority)
-                .isEqualTo(authority);
 
         return this;
     }
@@ -57,28 +44,6 @@ public class UriAssert extends AbstractAssert<UriAssert, Uri> {
         return this;
     }
 
-    public UriAssert containsQueryParameterName(String name) {
-        isNotNull();
-
-        final Set<String> names = actual.getQueryParameterNames();
-        assertThat(names)
-                .overridingErrorMessage("Expected query parameter <%s> does not exist.", name)
-                .contains(name);
-
-        return this;
-    }
-
-    public UriAssert doesNotContainQueryParameterName(String name) {
-        isNotNull();
-
-        final Set<String> names = actual.getQueryParameterNames();
-        assertThat(names)
-                .overridingErrorMessage("Expected query parameter <%s> exists.", name)
-                .doesNotContain(name);
-
-        return this;
-    }
-
     public UriAssert hasQueryParameter(String name, String parameter) {
         isNotNull();
 
@@ -96,7 +61,7 @@ public class UriAssert extends AbstractAssert<UriAssert, Uri> {
         final String actualParameter = actual.getQueryParameter(name);
         assertThat(actualParameter)
                 .overridingErrorMessage("Expected parameter is empty but was <%s>.", actualParameter)
-                .isEmpty();
+                .isNull();
 
         return this;
     }
