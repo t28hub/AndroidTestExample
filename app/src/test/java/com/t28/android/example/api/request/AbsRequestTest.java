@@ -106,6 +106,22 @@ public class AbsRequestTest {
     }
 
     @Test
+    public void parseNetworkResponse_shouldReturnSuccessResponseWhenParsingSucceeded() {
+        // setup
+        final byte[] data = "android".getBytes();
+        final NetworkResponse networkResponse = new NetworkResponse(data);
+        final AbsRequest<User> request = new UserRequest(Request.Method.GET, URL, null, null);
+
+        // exercise
+        final Response<User> response = request.parseNetworkResponse(networkResponse);
+
+        // verify
+        assertThat(response)
+                .hasResult()
+                .hasNoError();
+    }
+
+    @Test
     public void parseNetworkResponse_shouldReturnErrorResponseWhenResponseBodyIsNull() {
         // setup
         final NetworkResponse networkResponse = new NetworkResponse(null);
@@ -123,7 +139,8 @@ public class AbsRequestTest {
     @Test
     public void parseNetworkResponse_shouldReturnErrorResponseWhenResponseBodyIsEmpty() {
         // setup
-        final NetworkResponse networkResponse = new NetworkResponse("".getBytes());
+        final byte[] data = "".getBytes();
+        final NetworkResponse networkResponse = new NetworkResponse(data);
         final AbsRequest<User> request = new UserRequest(Request.Method.GET, URL, null, null);
 
         // exercise
