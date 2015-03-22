@@ -35,13 +35,17 @@ public class ResponseAssert<T> extends AbstractAssert<ResponseAssert<T>, Respons
         return this;
     }
 
-    public ResponseAssert<T> hasError(VolleyError error) {
+    public ResponseAssert<T> hasErrorInstanceOf(Class<? extends VolleyError> type) {
         isNotNull();
 
         final VolleyError actualError = actual.error;
         assertThat(actualError)
-                .overridingErrorMessage("Expected error <%s> but was <%s>", error, actualError)
-                .isSameAs(error);
+                .overridingErrorMessage(
+                        "Expected error instance of <%s> but was <%s>",
+                        type.getCanonicalName(),
+                        actualError.getClass().getCanonicalName()
+                )
+                .hasCauseExactlyInstanceOf(type);
 
         return this;
     }
