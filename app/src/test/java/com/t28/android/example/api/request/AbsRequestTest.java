@@ -22,6 +22,7 @@ import org.robolectric.annotation.Config;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static com.t28.android.example.test.assertion.Assertions.assertThat;
 import static org.mockito.Matchers.eq;
@@ -126,6 +127,53 @@ public class AbsRequestTest {
         assertThat(response)
                 .hasResult()
                 .hasNoError();
+    }
+
+    @Test
+    public void parseNetworkResponse_shouldReturnSuccessResponseWithoutCacheEntryWhenTimeToLiveAndSoftTimeToLiveAreZero() {
+        // setup
+        final byte[] data = "android".getBytes();
+        final NetworkResponse networkResponse = new NetworkResponse(data);
+        final AbsRequest<User> spiedRequest = spy(new UserRequest(Request.Method.GET, URL, null, null));
+
+        // exercise
+        final Response<User> response = spiedRequest.parseNetworkResponse(networkResponse);
+
+        // verify
+        assertThat(response)
+                .hasNoCacheEntry();
+    }
+
+    @Test
+    public void parseNetworkResponse_shouldReturnSuccessResponseWithCacheEntryWhenTimeToLiveIsGreaterThanZero() {
+        // setup
+        final byte[] data = "android".getBytes();
+        final NetworkResponse networkResponse = new NetworkResponse(data);
+        final AbsRequest<User> spiedRequest = spy(new UserRequest(Request.Method.GET, URL, null, null));
+        when(spiedRequest.getTimeToLive()).thenReturn(TimeUnit.MINUTES.toMillis(10));
+
+        // exercise
+        final Response<User> response = spiedRequest.parseNetworkResponse(networkResponse);
+
+        // verify
+        assertThat(response)
+                .hasCacheEntry();
+    }
+
+    @Test
+    public void parseNetworkResponse_shouldReturnSuccessResponseWithCacheEntryWhenSoftTimeToLiveIsGreaterThanZero() {
+        // setup
+        final byte[] data = "android".getBytes();
+        final NetworkResponse networkResponse = new NetworkResponse(data);
+        final AbsRequest<User> spiedRequest = spy(new UserRequest(Request.Method.GET, URL, null, null));
+        when(spiedRequest.getSoftTimeToLive()).thenReturn(TimeUnit.MINUTES.toMillis(10));
+
+        // exercise
+        final Response<User> response = spiedRequest.parseNetworkResponse(networkResponse);
+
+        // verify
+        assertThat(response)
+                .hasCacheEntry();
     }
 
     @Test
