@@ -13,13 +13,13 @@ public class ResponseAssert<T> extends AbstractAssert<ResponseAssert<T>, Respons
         super(actual, ResponseAssert.class);
     }
 
-    public ResponseAssert<T> hasResult(T result) {
+    public ResponseAssert<T> hasResult() {
         isNotNull();
 
         final T actualResult = actual.result;
         assertThat(actualResult)
-                .overridingErrorMessage("Expected result <%s> but was <%s>", result, actualResult)
-                .isSameAs(result);
+                .overridingErrorMessage("Expected result does not exist")
+                .isNotNull();
 
         return this;
     }
