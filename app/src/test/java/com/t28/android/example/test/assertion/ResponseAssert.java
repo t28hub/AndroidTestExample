@@ -1,5 +1,6 @@
 package com.t28.android.example.test.assertion;
 
+import com.android.volley.Cache;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
@@ -56,6 +57,28 @@ public class ResponseAssert<T> extends AbstractAssert<ResponseAssert<T>, Respons
         final VolleyError actualError = actual.error;
         assertThat(actualError)
                 .overridingErrorMessage("Expected error <null> but was <%s>", actualError)
+                .isNull();
+
+        return this;
+    }
+
+    public ResponseAssert<T> hasCacheEntry() {
+        isNotNull();
+
+        final Cache.Entry actualCacheEntry = actual.cacheEntry;
+        assertThat(actualCacheEntry)
+                .overridingErrorMessage("Expected cache entry does not exist")
+                .isNotNull();
+
+        return this;
+    }
+
+    public ResponseAssert<T> hasNoCacheEntry() {
+        isNotNull();
+
+        final Cache.Entry actualCacheEntry = actual.cacheEntry;
+        assertThat(actualCacheEntry)
+                .overridingErrorMessage("Expected cache entry <null> but was <%s>", actualCacheEntry)
                 .isNull();
 
         return this;
