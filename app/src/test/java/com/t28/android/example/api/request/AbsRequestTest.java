@@ -2,8 +2,6 @@ package com.t28.android.example.api.request;
 
 import android.os.Build;
 
-import com.android.volley.Cache;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.t28.android.example.api.parser.Parser;
@@ -47,11 +45,6 @@ public class AbsRequestTest {
 
         @Override
         protected Parser<TestModel> createParser() {
-            return null;
-        }
-
-        @Override
-        protected Cache.Entry createCache(NetworkResponse response) {
             return null;
         }
     }
