@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.t28.android.example.api.parser.ParseException;
 import com.t28.android.example.api.parser.Parser;
 import com.t28.android.example.data.model.Model;
@@ -112,6 +113,11 @@ public class AbsRequestTest {
 
         // exercise
         final Response<User> response = request.parseNetworkResponse(networkResponse);
+
+        // verify
+        assertThat(response)
+                .hasNoResult()
+                .hasErrorInstanceOf(VolleyError.class);
     }
 
     @Test
@@ -122,6 +128,11 @@ public class AbsRequestTest {
 
         // exercise
         final Response<User> response = request.parseNetworkResponse(networkResponse);
+
+        // verify
+        assertThat(response)
+                .hasNoResult()
+                .hasErrorInstanceOf(VolleyError.class);
     }
 
     public static class User implements Model {
