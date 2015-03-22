@@ -4,6 +4,8 @@ import android.net.Uri;
 
 import org.assertj.core.api.AbstractAssert;
 
+import java.util.Set;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UriAssert extends AbstractAssert<UriAssert, Uri> {
@@ -55,13 +57,46 @@ public class UriAssert extends AbstractAssert<UriAssert, Uri> {
         return this;
     }
 
-    public UriAssert hasQueryParameter(String key, String parameter) {
+    public UriAssert containsQueryParameterName(String name) {
         isNotNull();
 
-        final String actualParameter = actual.getQueryParameter(key);
+        final Set<String> names = actual.getQueryParameterNames();
+        assertThat(names)
+                .overridingErrorMessage("Expected query parameter <%s> does not exist.", name)
+                .contains(name);
+
+        return this;
+    }
+
+    public UriAssert doesNotContainQueryParameterName(String name) {
+        isNotNull();
+
+        final Set<String> names = actual.getQueryParameterNames();
+        assertThat(names)
+                .overridingErrorMessage("Expected query parameter <%s> exists.", name)
+                .doesNotContain(name);
+
+        return this;
+    }
+
+    public UriAssert hasQueryParameter(String name, String parameter) {
+        isNotNull();
+
+        final String actualParameter = actual.getQueryParameter(name);
         assertThat(actualParameter)
                 .overridingErrorMessage("Expected parameter <%s> but was <%s>.", parameter, actualParameter)
                 .isEqualTo(parameter);
+
+        return this;
+    }
+
+    public UriAssert hasNoQueryParameter(String name) {
+        isNotNull();
+
+        final String actualParameter = actual.getQueryParameter(name);
+        assertThat(actualParameter)
+                .overridingErrorMessage("Expected parameter is empty but was <%s>.", actualParameter)
+                .isEmpty();
 
         return this;
     }
