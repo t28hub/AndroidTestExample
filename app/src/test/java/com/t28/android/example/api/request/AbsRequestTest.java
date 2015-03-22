@@ -243,10 +243,6 @@ public class AbsRequestTest {
         public boolean isValid() {
             return !TextUtils.isEmpty(mName);
         }
-
-        public String getName() {
-            return mName;
-        }
     }
 
     public static class UserParser implements Parser<User> {
