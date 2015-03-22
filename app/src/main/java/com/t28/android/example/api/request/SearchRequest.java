@@ -34,7 +34,11 @@ public class SearchRequest extends AbsRequest<SearchResult> {
         final Uri.Builder urlBuilder = Uri.parse(BASE_URL).buildUpon();
         final Set<Map.Entry<String, String>> entries = params.entrySet();
         for (Map.Entry<String, String> entry : entries) {
-            urlBuilder.appendQueryParameter(entry.getKey(), entry.getValue());
+            final String value = entry.getValue();
+            if (TextUtils.isEmpty(value)) {
+                continue;
+            }
+            urlBuilder.appendQueryParameter(entry.getKey(), value);
         }
         return urlBuilder.build().toString();
     }
