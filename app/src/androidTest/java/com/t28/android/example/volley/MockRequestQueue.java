@@ -42,4 +42,9 @@ public class MockRequestQueue extends RequestQueue {
     public void pause() {
         mIsPaused = true;
     }
+
+    public void clean() {
+        mWaitingRequests.clear();
+        cancelAll(new AnyRequestFilter());
+    }
 }
