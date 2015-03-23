@@ -37,6 +37,7 @@ public class VolleyHolder {
         }
         if (sRequestQueue == null) {
             sRequestQueue = sRequestQueueFactory.create(context);
+            sRequestQueue.start();
         }
         return sRequestQueue;
     }
