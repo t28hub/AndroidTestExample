@@ -26,7 +26,7 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.android.api.Assertions.assertThat;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -132,6 +132,56 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
                         .setStatusCode(StatusCode.OK)
                         .addHeader("Content-Type", "application/json")
                         .setBody(mAssetReader.read("feed_load_success_10.json"))
+                        .build()
+        );
+        mRequestQueue.resume();
+
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void entryListFragment_shouldShowFailureViewWhenResponseReturnsNotLoaded() throws IOException {
+        final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
+        dispatcher.append(
+                new RequestMatcher() {
+                    @Override
+                    public boolean match(@NonNull Request<?> request) {
+                        return true;
+                    }
+                },
+                new NetworkResponseBuilder()
+                        .setStatusCode(StatusCode.OK)
+                        .addHeader("Content-Type", "application/json")
+                        .setBody(mAssetReader.read("feed_load_failure_could_not_be_loaded.json"))
+                        .build()
+        );
+        mRequestQueue.resume();
+
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void entryListFragment_shouldShowFailureViewWhenResponseReturnsInvalidVersion() throws IOException {
+        final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
+        dispatcher.append(
+                new RequestMatcher() {
+                    @Override
+                    public boolean match(@NonNull Request<?> request) {
+                        return true;
+                    }
+                },
+                new NetworkResponseBuilder()
+                        .setStatusCode(StatusCode.OK)
+                        .addHeader("Content-Type", "application/json")
+                        .setBody(mAssetReader.read("feed_load_failure_invalid_version.json"))
                         .build()
         );
         mRequestQueue.resume();
