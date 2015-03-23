@@ -26,7 +26,7 @@ public class NetworkDispatcher {
      * @param request リクエスト
      * @return リクエストに該当するレスポンス（存在しない場合は<em>null</em>）
      */
-    public NetworkResponse dispatch(@NonNull Request<?> request) {
+    public synchronized NetworkResponse dispatch(@NonNull Request<?> request) {
         final Set<Map.Entry<RequestMatcher, NetworkResponse>> entries = mExpectedResponseMap.entrySet();
         for (Map.Entry<RequestMatcher, NetworkResponse> entry : entries) {
             final RequestMatcher matcher = entry.getKey();
@@ -45,10 +45,23 @@ public class NetworkDispatcher {
         if (response == null) {
             throw new NullPointerException("response == null");
         }
-        mExpectedResponseMap.put(matcher, response);
+        synchronized (this) {
+            mExpectedResponseMap.put(matcher, response);
+        }
+    }
+
+    public void remove(RequestMatcher matcher) {
+        if (matcher == null) {
+            return;
+        }
+        synchronized (this) {
+            mExpectedResponseMap.remove(matcher);
+        }
     }
 
     public void clear() {
-        mExpectedResponseMap.clear();
+        synchronized (this) {
+            mExpectedResponseMap.clear();
+        }
     }
 }
