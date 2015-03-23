@@ -33,12 +33,12 @@ public class MockRequestQueue extends RequestQueue {
         if (!mIsPaused.get()) {
             return;
         }
+        mIsPaused.set(false);
 
         Request request;
         while ((request = mWaitingRequests.poll()) != null) {
             add(request);
         }
-        mIsPaused.set(false);
     }
 
     public void pause() {
