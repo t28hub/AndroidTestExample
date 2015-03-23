@@ -6,22 +6,23 @@ import com.android.volley.RequestQueue;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MockRequestQueue extends RequestQueue {
+    private final AtomicBoolean mIsPaused;
     private final NetworkDispatcher mNetworkDispatcher;
     private final Queue<Request<?>> mWaitingRequests;
 
-    private boolean mIsPaused;
-
     public MockRequestQueue(Cache cache, NetworkDispatcher networkDispatcher) {
         super(cache, new MockNetwork(networkDispatcher));
+        mIsPaused = new AtomicBoolean();
         mNetworkDispatcher = networkDispatcher;
         mWaitingRequests = new LinkedList<>();
     }
 
     @Override
     public <T> Request<T> add(Request<T> request) {
-        if (mIsPaused) {
+        if (mIsPaused.get()) {
             mWaitingRequests.add(request);
             return request;
         }
@@ -29,7 +30,7 @@ public class MockRequestQueue extends RequestQueue {
     }
 
     public void resume() {
-        if (!mIsPaused) {
+        if (!mIsPaused.get()) {
             return;
         }
 
@@ -37,11 +38,11 @@ public class MockRequestQueue extends RequestQueue {
         while ((request = mWaitingRequests.poll()) != null) {
             add(request);
         }
-        mIsPaused = false;
+        mIsPaused.set(false);
     }
 
     public void pause() {
-        mIsPaused = true;
+        mIsPaused.set(true);
     }
 
     public void clean() {
