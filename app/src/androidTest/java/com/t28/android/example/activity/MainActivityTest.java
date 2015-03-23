@@ -50,7 +50,8 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     public void setUp() throws Exception {
         super.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        mContext = InstrumentationRegistry.getContext();
+        //mContext = InstrumentationRegistry.getContext();
+        mContext = InstrumentationRegistry.getTargetContext();
         mRequestQueue = (MockRequestQueue) VolleyHolder.get().getRequestQueue(mContext);
         mRequestQueue.pause();
 
