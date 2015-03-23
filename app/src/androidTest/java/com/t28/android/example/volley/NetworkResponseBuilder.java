@@ -58,6 +58,6 @@ public class NetworkResponseBuilder {
     }
 
     public NetworkResponse build() {
-        return new NetworkResponse(null);
+        return new NetworkResponse(mStatusCode, mBody.clone(), new HashMap<>(mHeaders), mNotModified, mNetworkTimeMs);
     }
 }
