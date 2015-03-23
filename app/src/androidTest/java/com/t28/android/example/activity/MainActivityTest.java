@@ -2,20 +2,20 @@ package com.t28.android.example.activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
 
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.t28.android.example.util.IoUtils;
+import com.t28.android.example.test.AssetReader;
 import com.t28.android.example.volley.MockRequestQueue;
 import com.t28.android.example.volley.MockRequestQueueFactory;
 import com.t28.android.example.volley.NetworkDispatcher;
+import com.t28.android.example.volley.NetworkResponseBuilder;
 import com.t28.android.example.volley.RequestMatcher;
+import com.t28.android.example.volley.StatusCode;
 import com.t28.android.example.volley.VolleyHolder;
 
 import org.junit.After;
@@ -24,8 +24,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
-    private Context mContext;
+    private AssetReader mAssetReader;
     private MockRequestQueue mRequestQueue;
     private Activity mActivity;
 
@@ -50,9 +48,10 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     public void setUp() throws Exception {
         super.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        //mContext = InstrumentationRegistry.getContext();
-        mContext = InstrumentationRegistry.getTargetContext();
-        mRequestQueue = (MockRequestQueue) VolleyHolder.get().getRequestQueue(mContext);
+
+        final Context context = InstrumentationRegistry.getContext();
+        mAssetReader = new AssetReader(context.getAssets());
+        mRequestQueue = (MockRequestQueue) VolleyHolder.get().getRequestQueue(context);
         mRequestQueue.pause();
 
         mActivity = getActivity();
@@ -70,14 +69,21 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     @Test
-    public void startActivity0() throws IOException {
+    public void entryListFragment_shouldShowSuccessViewWhenResponseHasNoEntry() throws IOException {
         final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
-        dispatcher.append(new RequestMatcher() {
-            @Override
-            public boolean match(@NonNull Request<?> request) {
-                return true;
-            }
-        }, new NetworkResponse(loadAssetFile("feed_load_success_0.json")));
+        dispatcher.append(
+                new RequestMatcher() {
+                    @Override
+                    public boolean match(@NonNull Request<?> request) {
+                        return true;
+                    }
+                },
+                new NetworkResponseBuilder()
+                        .setStatusCode(StatusCode.OK)
+                        .addHeader("Content-Type", "application/json")
+                        .setBody(mAssetReader.read("feed_load_success_0.json"))
+                        .build()
+        );
         mRequestQueue.resume();
 
         try {
@@ -88,14 +94,21 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     @Test
-    public void startActivity1() throws IOException {
+    public void entryListFragment_shouldShowSuccessViewWhenResponseHasEntry() throws IOException {
         final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
-        dispatcher.append(new RequestMatcher() {
-            @Override
-            public boolean match(@NonNull Request<?> request) {
-                return true;
-            }
-        }, new NetworkResponse(loadAssetFile("feed_load_success_1.json")));
+        dispatcher.append(
+                new RequestMatcher() {
+                    @Override
+                    public boolean match(@NonNull Request<?> request) {
+                        return true;
+                    }
+                },
+                new NetworkResponseBuilder()
+                        .setStatusCode(StatusCode.OK)
+                        .addHeader("Content-Type", "application/json")
+                        .setBody(mAssetReader.read("feed_load_success_1.json"))
+                        .build()
+        );
         mRequestQueue.resume();
 
         try {
@@ -106,38 +119,27 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     @Test
-    public void startActivity100() throws IOException {
+    public void entryListFragment_shouldShowSuccessViewWhenResponseHasEntries() throws IOException {
         final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
-        dispatcher.append(new RequestMatcher() {
-            @Override
-            public boolean match(@NonNull Request<?> request) {
-                return true;
-            }
-        }, new NetworkResponse(loadAssetFile("feed_load_success_100.json")));
+        dispatcher.append(
+                new RequestMatcher() {
+                    @Override
+                    public boolean match(@NonNull Request<?> request) {
+                        return true;
+                    }
+                },
+                new NetworkResponseBuilder()
+                        .setStatusCode(StatusCode.OK)
+                        .addHeader("Content-Type", "application/json")
+                        .setBody(mAssetReader.read("feed_load_success_10.json"))
+                        .build()
+        );
         mRequestQueue.resume();
 
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
             fail(e.getMessage());
-        }
-    }
-
-    private byte[] loadAssetFile(String fileName) throws IOException {
-        final AssetManager assetManager = mContext.getAssets();
-        BufferedInputStream input = null;
-        ByteArrayOutputStream output = null;
-        try {
-            input = new BufferedInputStream(assetManager.open(fileName));
-            output = new ByteArrayOutputStream();
-            final byte[] buffer = new byte[1024];
-            while (input.read(buffer) != -1) {
-                output.write(buffer);
-            }
-            return output.toByteArray();
-        } finally {
-            IoUtils.close(input);
-            IoUtils.close(output);
         }
     }
 }
