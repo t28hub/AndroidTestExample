@@ -1,7 +1,6 @@
 package com.t28.android.example.volley;
 
 import com.android.volley.Cache;
-import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 
@@ -9,12 +8,14 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class MockRequestQueue extends RequestQueue {
+    private final NetworkDispatcher mNetworkDispatcher;
     private final Queue<Request<?>> mWaitingRequests;
 
     private boolean mIsPaused;
 
-    public MockRequestQueue(Cache cache, Network network) {
-        super(cache, network);
+    public MockRequestQueue(Cache cache, NetworkDispatcher networkDispatcher) {
+        super(cache, new MockNetwork(networkDispatcher));
+        mNetworkDispatcher = networkDispatcher;
         mWaitingRequests = new LinkedList<>();
     }
 
@@ -44,6 +45,7 @@ public class MockRequestQueue extends RequestQueue {
     }
 
     public void clean() {
+        mNetworkDispatcher.clear();
         mWaitingRequests.clear();
         cancelAll(new AnyRequestFilter());
     }
