@@ -2,8 +2,6 @@ package com.t28.android.example.volley;
 
 import com.android.volley.NetworkResponse;
 
-import org.apache.http.HttpStatus;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +10,7 @@ public class NetworkResponseBuilder {
 
     private final Map<String, String> mHeaders;
 
-    private int mStatusCode = HttpStatus.SC_OK;
+    private StatusCode mStatusCode = StatusCode.OK;
     private byte[] mBody = EMPTY_BODY;
     private boolean mNotModified;
     private long mNetworkTimeMs;
@@ -21,7 +19,7 @@ public class NetworkResponseBuilder {
         mHeaders = new HashMap<>();
     }
 
-    public NetworkResponseBuilder setStatusCode(int statusCode) {
+    public NetworkResponseBuilder setStatusCode(StatusCode statusCode) {
         mStatusCode = statusCode;
         return this;
     }
@@ -58,6 +56,9 @@ public class NetworkResponseBuilder {
     }
 
     public NetworkResponse build() {
-        return new NetworkResponse(mStatusCode, mBody.clone(), new HashMap<>(mHeaders), mNotModified, mNetworkTimeMs);
+        final int statusCode = mStatusCode.toInt();
+        final byte[] body = mBody.clone();
+        final Map<String, String> headers = new HashMap<>(mHeaders);
+        return new NetworkResponse(statusCode, body, headers, mNotModified, mNetworkTimeMs);
     }
 }
