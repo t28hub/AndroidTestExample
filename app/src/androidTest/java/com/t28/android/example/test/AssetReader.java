@@ -10,6 +10,20 @@ import java.io.IOException;
 
 /**
  * assetsディレクトリ以下のファイルを読み込むクラス
+ * <p>
+ * AndroidTestのassetを読み込む場合
+ * <code>
+ * final Context context = InstrumentationRegistry.getContext();
+ * final AssetReader reader = new AssetReader(context.getAssets());
+ * final byte[] data = reader.read("asset_file_name");
+ * </code>
+ * アプリケーションのassetを読み込む場合
+ * <code>
+ * final Context context = InstrumentationRegistry.getTargetContext();
+ * final AssetReader reader = new AssetReader(context.getAssets());
+ * final byte[] data = reader.read("asset_file_name");
+ * </code>
+ * </p>
  */
 public class AssetReader {
     private static final int END_OF_FILE = -1;
