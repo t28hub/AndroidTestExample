@@ -29,6 +29,10 @@ public class MockRequestQueue extends RequestQueue {
         return super.add(request);
     }
 
+    public NetworkDispatcher getNetworkDispatcher() {
+        return mNetworkDispatcher;
+    }
+
     public void resume() {
         if (!mIsPaused.get()) {
             return;
