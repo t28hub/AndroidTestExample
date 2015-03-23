@@ -106,7 +106,13 @@ public class BasicRequestMatcher implements RequestMatcher {
     }
 
     private boolean matchBody(byte[] body) {
-        final Matcher matcher = mBodyPattern.matcher(new String(body));
+        final String textBody;
+        if (body == null) {
+            textBody = "";
+        } else {
+            textBody = new String(body);
+        }
+        final Matcher matcher = mBodyPattern.matcher(textBody);
         return matcher.find();
     }
 
