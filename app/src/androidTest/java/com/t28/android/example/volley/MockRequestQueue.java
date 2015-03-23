@@ -18,13 +18,14 @@ public class MockRequestQueue extends RequestQueue {
 
     /**
      * コンストラクタ
-     * @param cache キャッシュ
-     * @param networkDispatcher リクエストのディスパッチャー
+     *
+     * @param cache      キャッシュ
+     * @param dispatcher ディスパッチャー
      */
-    public MockRequestQueue(Cache cache, NetworkDispatcher networkDispatcher) {
-        super(cache, new MockNetwork(networkDispatcher));
+    public MockRequestQueue(Cache cache, NetworkDispatcher dispatcher) {
+        super(cache, new MockNetwork(dispatcher));
         mIsPaused = new AtomicBoolean();
-        mNetworkDispatcher = networkDispatcher;
+        mNetworkDispatcher = dispatcher;
         mWaitingRequests = new LinkedList<>();
     }
 
