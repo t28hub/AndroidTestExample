@@ -21,22 +21,22 @@ public class MapCache implements Cache {
     }
 
     @Override
-    public Entry get(String key) {
+    public synchronized Entry get(String key) {
         return mEntries.get(key);
     }
 
     @Override
-    public void put(String key, Entry entry) {
+    public synchronized void put(String key, Entry entry) {
         mEntries.put(key, entry);
     }
 
     @Override
-    public void initialize() {
+    public synchronized void initialize() {
         mEntries.clear();
     }
 
     @Override
-    public void invalidate(String key, boolean fullExpire) {
+    public synchronized void invalidate(String key, boolean fullExpire) {
         final Entry entry = mEntries.get(key);
         if (entry == null) {
             return;
@@ -50,12 +50,12 @@ public class MapCache implements Cache {
     }
 
     @Override
-    public void remove(String key) {
+    public synchronized void remove(String key) {
         mEntries.remove(key);
     }
 
     @Override
-    public void clear() {
+    public synchronized void clear() {
         mEntries.clear();
     }
 }
