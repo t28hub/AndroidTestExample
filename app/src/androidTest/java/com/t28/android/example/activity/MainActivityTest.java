@@ -9,9 +9,11 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
 
 import com.t28.android.example.util.IoUtils;
+import com.t28.android.example.volley.MockRequestQueue;
 import com.t28.android.example.volley.MockRequestQueueFactory;
 import com.t28.android.example.volley.VolleyHolder;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -25,6 +27,7 @@ import java.io.IOException;
 @LargeTest
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
     private Context mContext;
+    private MockRequestQueue mRequestQueue;
     private Activity mActivity;
 
     public MainActivityTest() {
@@ -41,7 +44,16 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         super.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         mContext = InstrumentationRegistry.getContext();
+        mRequestQueue = (MockRequestQueue) VolleyHolder.get().getRequestQueue(mContext);
+        mRequestQueue.pause();
+
         mActivity = getActivity();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        mRequestQueue.clean();
+        super.tearDown();
     }
 
     @Test
