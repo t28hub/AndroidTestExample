@@ -8,11 +8,19 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * テスト用の{@link com.android.volley.RequestQueue}
+ */
 public class MockRequestQueue extends RequestQueue {
     private final AtomicBoolean mIsPaused;
     private final NetworkDispatcher mNetworkDispatcher;
     private final Queue<Request<?>> mWaitingRequests;
 
+    /**
+     * コンストラクタ
+     * @param cache キャッシュ
+     * @param networkDispatcher リクエストのディスパッチャー
+     */
     public MockRequestQueue(Cache cache, NetworkDispatcher networkDispatcher) {
         super(cache, new MockNetwork(networkDispatcher));
         mIsPaused = new AtomicBoolean();
@@ -29,10 +37,18 @@ public class MockRequestQueue extends RequestQueue {
         return super.add(request);
     }
 
+    /**
+     * NetworkDispatcherの取得
+     *
+     * @return NetworkDispatcher
+     */
     public NetworkDispatcher getNetworkDispatcher() {
         return mNetworkDispatcher;
     }
 
+    /**
+     * リクエスト処理の再開
+     */
     public void resume() {
         if (!mIsPaused.get()) {
             return;
@@ -45,10 +61,16 @@ public class MockRequestQueue extends RequestQueue {
         }
     }
 
+    /**
+     * リクエスト処理の一時停止
+     */
     public void pause() {
         mIsPaused.set(true);
     }
 
+    /**
+     * 内部状態のクリーンアップ
+     */
     public void clean() {
         mNetworkDispatcher.clear();
         mWaitingRequests.clear();
