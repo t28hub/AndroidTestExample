@@ -1,5 +1,7 @@
 package com.t28.android.example.volley;
 
+import android.text.TextUtils;
+
 import com.android.volley.NetworkResponse;
 
 import java.util.HashMap;
@@ -45,7 +47,9 @@ public class NetworkResponseBuilder {
      * @see #addHeaders(java.util.Map)
      */
     public NetworkResponseBuilder addHeader(String name, String value) {
-        mHeaders.put(name, value);
+        if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(value)) {
+            mHeaders.put(name, value);
+        }
         return this;
     }
 
