@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 
 import com.android.volley.Cache;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.NoCache;
 
 public class MockRequestQueueFactory implements RequestQueueFactory {
 
@@ -15,7 +14,7 @@ public class MockRequestQueueFactory implements RequestQueueFactory {
     @NonNull
     @Override
     public RequestQueue create(Context context) {
-        final Cache cache = new NoCache();
+        final Cache cache = new MapCache();
         final NetworkDispatcher dispatcher = new NetworkDispatcher();
         return new MockRequestQueue(cache, dispatcher);
     }
