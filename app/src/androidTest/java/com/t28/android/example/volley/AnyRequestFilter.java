@@ -6,11 +6,11 @@ import com.android.volley.RequestQueue;
 /**
  * 全てのリクエストをフィルタリングするRequestFilter
  */
-public class AnyRequestFilter implements RequestQueue.RequestFilter {
+class AnyRequestFilter implements RequestQueue.RequestFilter {
     /**
      * コンストラクタ
      */
-    public AnyRequestFilter() {
+    AnyRequestFilter() {
     }
 
     @Override
