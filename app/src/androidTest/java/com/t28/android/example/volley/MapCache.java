@@ -5,11 +5,17 @@ import com.android.volley.Cache;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Mapベースのオンメモリキャッシュ
+ */
 public class MapCache implements Cache {
     private static final long NO_TIME_TO_LIVE = 0;
 
     private final Map<String, Entry> mEntries;
 
+    /**
+     * コンストラクタ
+     */
     public MapCache() {
         mEntries = new HashMap<>();
     }
