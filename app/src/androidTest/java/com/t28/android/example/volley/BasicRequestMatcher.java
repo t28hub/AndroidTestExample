@@ -18,16 +18,16 @@ import java.util.regex.Pattern;
 public class BasicRequestMatcher implements RequestMatcher {
     private static final Pattern ANY_PATTERN = Pattern.compile(".*");
 
-    private final MethodPattern mMethodPattern;
+    private final MethodMatcher mMethodMatcher;
     private final Pattern mUrlPattern;
     private final Map<String, Pattern> mHeaderPatterns;
     private final Pattern mBodyPattern;
 
     private BasicRequestMatcher(Builder builder) {
-        if (builder.mMethodPattern == null) {
-            mMethodPattern = MethodPattern.ANY;
+        if (builder.mMethodMatcher == null) {
+            mMethodMatcher = MethodMatcher.ANY;
         } else {
-            mMethodPattern = builder.mMethodPattern;
+            mMethodMatcher = builder.mMethodMatcher;
         }
 
         mUrlPattern = compile(builder.mUrlPattern);
@@ -82,7 +82,7 @@ public class BasicRequestMatcher implements RequestMatcher {
     }
 
     private boolean matchMethod(int method) {
-        return mMethodPattern.match(method);
+        return mMethodMatcher.match(method);
     }
 
     private boolean matchUrl(String url) {
@@ -116,7 +116,7 @@ public class BasicRequestMatcher implements RequestMatcher {
     public static final class Builder {
         private final Map<String, String> mHeaderPatterns;
 
-        private MethodPattern mMethodPattern;
+        private MethodMatcher mMethodMatcher;
         private String mUrlPattern;
         private String mBodyPattern;
 
@@ -130,11 +130,11 @@ public class BasicRequestMatcher implements RequestMatcher {
         /**
          * メソッドのパターンを設定
          *
-         * @param pattern パターン
+         * @param matcher マッチャー
          * @return 自身のインスタンス
          */
-        public Builder setMethodPattern(MethodPattern pattern) {
-            mMethodPattern = pattern;
+        public Builder setMethodMatcher(MethodMatcher matcher) {
+            mMethodMatcher = matcher;
             return this;
         }
 

@@ -3,9 +3,9 @@ package com.t28.android.example.volley;
 import com.android.volley.Request;
 
 /**
- * リクエストメソッドのパターン
+ * リクエストメソッドの適合判定
  */
-public enum MethodPattern {
+public enum MethodMatcher {
     /**
      * 任意のメソッド
      */
@@ -47,10 +47,10 @@ public enum MethodPattern {
     };
 
     /**
-     * メソッドがマッチするか検証する
+     * メソッドが適合するか検証する
      *
      * @param method リクエストメソッド
-     * @return マッチする場合<em>true</em>
+     * @return 適合する場合<em>true</em>
      */
     abstract boolean match(int method);
 }
