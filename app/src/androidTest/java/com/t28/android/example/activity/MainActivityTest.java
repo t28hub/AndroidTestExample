@@ -28,6 +28,8 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
@@ -62,39 +64,79 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     @Test
-    public void testStartActivity() {
-        final AssetManager assetManager = mContext.getAssets();
-        BufferedInputStream input = null;
-        ByteArrayOutputStream output = null;
-        byte[] body = "".getBytes();
-        try {
-            input = new BufferedInputStream(assetManager.open("feed_load_success_10.json"));
-            output = new ByteArrayOutputStream();
-            final byte[] buffer = new byte[1024];
-            while (input.read(buffer) != -1) {
-                output.write(buffer);
-            }
-            body = output.toByteArray();
-        } catch (IOException e) {
-            fail(e.getMessage());
-        } finally {
-            IoUtils.close(input);
-            IoUtils.close(output);
-        }
+    public void test_activityShouldNotNull() {
+        assertThat(mActivity).isNotNull();
+    }
 
+    @Test
+    public void startActivity0() throws IOException {
         final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
         dispatcher.append(new RequestMatcher() {
             @Override
             public boolean match(@NonNull Request<?> request) {
                 return true;
             }
-        }, new NetworkResponse(body));
+        }, new NetworkResponse(loadAssetFile("feed_load_success_0.json")));
         mRequestQueue.resume();
 
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
             fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void startActivity1() throws IOException {
+        final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
+        dispatcher.append(new RequestMatcher() {
+            @Override
+            public boolean match(@NonNull Request<?> request) {
+                return true;
+            }
+        }, new NetworkResponse(loadAssetFile("feed_load_success_1.json")));
+        mRequestQueue.resume();
+
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void startActivity100() throws IOException {
+        final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
+        dispatcher.append(new RequestMatcher() {
+            @Override
+            public boolean match(@NonNull Request<?> request) {
+                return true;
+            }
+        }, new NetworkResponse(loadAssetFile("feed_load_success_100.json")));
+        mRequestQueue.resume();
+
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    private byte[] loadAssetFile(String fileName) throws IOException {
+        final AssetManager assetManager = mContext.getAssets();
+        BufferedInputStream input = null;
+        ByteArrayOutputStream output = null;
+        try {
+            input = new BufferedInputStream(assetManager.open(fileName));
+            output = new ByteArrayOutputStream();
+            final byte[] buffer = new byte[1024];
+            while (input.read(buffer) != -1) {
+                output.write(buffer);
+            }
+            return output.toByteArray();
+        } finally {
+            IoUtils.close(input);
+            IoUtils.close(output);
         }
     }
 }
