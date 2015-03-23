@@ -56,6 +56,11 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     @After
     public void tearDown() throws Exception {
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            fail(e.getMessage());
+        }
         mRequestQueue.clean();
         super.tearDown();
     }
@@ -79,12 +84,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
                         .build()
         );
         mRequestQueue.resume();
-
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            fail(e.getMessage());
-        }
     }
 
     @Test
@@ -102,12 +101,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
                         .build()
         );
         mRequestQueue.resume();
-
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            fail(e.getMessage());
-        }
     }
 
     @Test
@@ -125,12 +118,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
                         .build()
         );
         mRequestQueue.resume();
-
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            fail(e.getMessage());
-        }
     }
 
     @Test
@@ -148,12 +135,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
                         .build()
         );
         mRequestQueue.resume();
-
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            fail(e.getMessage());
-        }
     }
 
     @Test
@@ -171,11 +152,5 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
                         .build()
         );
         mRequestQueue.resume();
-
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            fail(e.getMessage());
-        }
     }
 }
