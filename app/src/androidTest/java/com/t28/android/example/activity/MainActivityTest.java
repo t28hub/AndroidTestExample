@@ -3,10 +3,14 @@ package com.t28.android.example.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.view.ViewPager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.view.View;
 
+import com.t28.android.example.R;
 import com.t28.android.example.test.AssetReader;
 import com.t28.android.example.volley.BasicRequestMatcher;
 import com.t28.android.example.volley.MethodMatcher;
@@ -17,6 +21,8 @@ import com.t28.android.example.volley.NetworkResponseBuilder;
 import com.t28.android.example.volley.StatusCode;
 import com.t28.android.example.volley.VolleyProvider;
 
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -24,6 +30,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -56,11 +66,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     @After
     public void tearDown() throws Exception {
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            fail(e.getMessage());
-        }
         mRequestQueue.clean();
         super.tearDown();
     }
@@ -101,6 +106,28 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
                         .build()
         );
         mRequestQueue.resume();
+
+        final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
+        onView(new BaseMatcher<View>() {
+            @Override
+            public boolean matches(Object object) {
+                if (!(object instanceof View)) {
+                    return false;
+                }
+
+                final View actual = (View) object;
+                final View expected = pager.getChildAt(0);
+                if (!expected.equals(actual)) {
+                    return false;
+                }
+                return expected.findViewById(R.id.entry_list_success) != null;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("");
+            }
+        }).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
     }
 
     @Test
