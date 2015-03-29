@@ -65,6 +65,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         final Context context = InstrumentationRegistry.getContext();
         mAssetReader = new AssetReader(context.getAssets());
+
         mRequestQueue = (MockRequestQueue) VolleyProvider.get().getRequestQueue(context);
         mRequestQueue.pause();
 
@@ -192,10 +193,10 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         mRequestQueue.resume();
     }
 
-    public static class RequestAddedListener implements MockRequestQueue.RequestAddedListener, RequestQueue.RequestFinishedListener {
+    public static class RequestQueueListener implements MockRequestQueue.RequestAddedListener, RequestQueue.RequestFinishedListener {
         private final CountingIdlingResource mIdlingResource;
 
-        public RequestAddedListener(CountingIdlingResource resource) {
+        public RequestQueueListener(CountingIdlingResource resource) {
             if (resource == null) {
                 throw new NullPointerException("resource == null");
             }
