@@ -85,10 +85,31 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         super.tearDown();
     }
 
+    /**
+     * <p>
+     * NOTE: テスト実行時にJUnit3系のテストメソッドが存在しないと他のテストメソッドも実行されない。
+     * </p>
+     */
     @Test
     public void test_activityShouldNotNull() {
     }
 
+    /**
+     * 読込中にLoadingViewが表示される
+     */
+    @Test
+    public void entryListFragment_shouldShowLoadingViewWhenWaitingForResponse() {
+        final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_loading)).check(isVisible());
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_success)).check(isGone());
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_failure)).check(isGone());
+    }
+
+    /**
+     * エントリーが存在しない場合にSuccessViewが表示される
+     *
+     * @throws IOException assetファイル読み込みに失敗した場合
+     */
     @Test
     public void entryListFragment_shouldShowSuccessViewWhenResponseHasNoEntry() throws IOException {
         final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
@@ -104,8 +125,18 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
                         .build()
         );
         mRequestQueue.resume();
+
+        final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_loading)).check(isGone());
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_success)).check(isVisible());
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_failure)).check(isGone());
     }
 
+    /**
+     * エントリーが存在する場合にSuccessViewが表示される
+     *
+     * @throws IOException assetファイル読み込みに失敗した場合
+     */
     @Test
     public void entryListFragment_shouldShowSuccessViewWhenResponseHasEntry() throws IOException {
         final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
@@ -128,6 +159,11 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_failure)).check(isGone());
     }
 
+    /**
+     * エントリーが複数存在する場合にSuccessViewが表示される
+     *
+     * @throws IOException assetファイル読み込みに失敗した場合
+     */
     @Test
     public void entryListFragment_shouldShowSuccessViewWhenResponseHasEntries() throws IOException {
         final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
@@ -143,8 +179,18 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
                         .build()
         );
         mRequestQueue.resume();
+
+        final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_loading)).check(isGone());
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_success)).check(isVisible());
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_failure)).check(isGone());
     }
 
+    /**
+     * 読込失敗時にFailureViewが表示される
+     *
+     * @throws IOException assetファイル読み込みに失敗した場合
+     */
     @Test
     public void entryListFragment_shouldShowFailureViewWhenResponseReturnsNotLoaded() throws IOException {
         final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
@@ -160,8 +206,18 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
                         .build()
         );
         mRequestQueue.resume();
+
+        final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_loading)).check(isGone());
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_success)).check(isGone());
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_failure)).check(isVisible());
     }
 
+    /**
+     * 読込失敗時にFailureViewが表示される
+     *
+     * @throws IOException assetファイル読み込みに失敗した場合
+     */
     @Test
     public void entryListFragment_shouldShowFailureViewWhenResponseReturnsInvalidVersion() throws IOException {
         final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
@@ -177,6 +233,11 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
                         .build()
         );
         mRequestQueue.resume();
+
+        final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_loading)).check(isGone());
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_success)).check(isGone());
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_failure)).check(isVisible());
     }
 
     public static class RequestQueueListener implements MockRequestQueue.RequestAddedListener, RequestQueue.RequestFinishedListener {
