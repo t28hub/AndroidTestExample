@@ -33,6 +33,9 @@ public class MockRequestQueue extends RequestQueue {
 
     @Override
     public <T> Request<T> add(Request<T> request) {
+        if (mListener != null) {
+            mListener.onRequestAdded(request);
+        }
         if (mIsPaused.get()) {
             mWaitingRequests.add(request);
             return request;
@@ -91,15 +94,13 @@ public class MockRequestQueue extends RequestQueue {
 
     /**
      * RequestQueueの振る舞いを検知するリスナー
-     *
-     * @param <T> リクエストのレスポンス型
      */
-    public interface RequestQueueListener<T> {
+    public interface RequestQueueListener {
         /**
          * リクエストが追加された時に呼び出される
          *
          * @param request 追加されたリクエスト
          */
-        void onRequestAdded(Request<T> request);
+        void onRequestAdded(Request<?> request);
     }
 }
