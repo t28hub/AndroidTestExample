@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.IdlingResource;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.view.ViewPager;
 import android.test.ActivityInstrumentationTestCase2;
@@ -36,8 +35,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.registerIdlingResources;
 import static android.support.test.espresso.Espresso.unregisterIdlingResources;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
+import static com.t28.android.example.test.Assertions.isGone;
+import static com.t28.android.example.test.Assertions.isVisible;
 import static com.t28.android.example.test.Matchers.atPage;
 import static com.t28.android.example.test.Matchers.withChildId;
 
@@ -126,12 +125,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         mRequestQueue.resume();
 
         final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_loading))
-                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_success))
-                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_failure))
-                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_loading)).check(isGone());
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_success)).check(isVisible());
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_failure)).check(isGone());
     }
 
     @Test
