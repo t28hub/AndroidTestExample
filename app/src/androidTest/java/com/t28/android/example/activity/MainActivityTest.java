@@ -3,7 +3,6 @@ package com.t28.android.example.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.IdlingResource;
 import android.support.test.espresso.contrib.CountingIdlingResource;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
@@ -46,7 +45,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVi
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
     private AssetReader mAssetReader;
     private MockRequestQueue mRequestQueue;
-    private IdlingResource mRequestIdlingResource;
+    private CountingIdlingResource mRequestIdlingResource;
     private Activity mActivity;
 
     public MainActivityTest() {
@@ -71,6 +70,10 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         mRequestIdlingResource = new CountingIdlingResource(MockRequestQueue.class.getName());
         registerIdlingResources(mRequestIdlingResource);
+
+        final RequestQueueListener queueListener = new RequestQueueListener(mRequestIdlingResource);
+        mRequestQueue.setRequestAddedListener(queueListener);
+        mRequestQueue.addRequestFinishedListener(queueListener);
 
         mActivity = getActivity();
     }
