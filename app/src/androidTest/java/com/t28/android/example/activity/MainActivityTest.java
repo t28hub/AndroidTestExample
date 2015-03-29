@@ -15,7 +15,7 @@ import com.t28.android.example.volley.MockRequestQueueFactory;
 import com.t28.android.example.volley.NetworkDispatcher;
 import com.t28.android.example.volley.NetworkResponseBuilder;
 import com.t28.android.example.volley.StatusCode;
-import com.t28.android.example.volley.VolleyHolder;
+import com.t28.android.example.volley.VolleyProvider;
 
 import org.junit.After;
 import org.junit.Before;
@@ -38,7 +38,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     @BeforeClass
     public static void setUpBeforeClass() {
-        VolleyHolder.injectRequestQueueFactory(new MockRequestQueueFactory());
+        VolleyProvider.injectRequestQueueFactory(new MockRequestQueueFactory());
     }
 
     @Before
@@ -48,7 +48,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         final Context context = InstrumentationRegistry.getContext();
         mAssetReader = new AssetReader(context.getAssets());
-        mRequestQueue = (MockRequestQueue) VolleyHolder.get().getRequestQueue(context);
+        mRequestQueue = (MockRequestQueue) VolleyProvider.get().getRequestQueue(context);
         mRequestQueue.pause();
 
         mActivity = getActivity();

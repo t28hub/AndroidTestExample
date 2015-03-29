@@ -21,7 +21,7 @@ import com.t28.android.example.data.adapter.EntryListAdapter;
 import com.t28.android.example.data.model.Entry;
 import com.t28.android.example.data.model.Feed;
 import com.t28.android.example.view.StatefulFrameLayout;
-import com.t28.android.example.volley.VolleyHolder;
+import com.t28.android.example.volley.VolleyProvider;
 
 import java.util.concurrent.TimeUnit;
 
@@ -133,7 +133,7 @@ public class EntryListFragment extends Fragment implements EntryListAdapter.OnEn
     }
 
     private RequestQueue getRequestQueue() {
-        return VolleyHolder.get().getRequestQueue(getActivity());
+        return VolleyProvider.get().getRequestQueue(getActivity());
     }
 
     /**

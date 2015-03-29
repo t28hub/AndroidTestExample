@@ -6,17 +6,17 @@ import android.support.annotation.NonNull;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 
-public class VolleyHolder {
+public class VolleyProvider {
     private static final RequestQueueFactory DEFAULT_REQUEST_QUEUE_FACTORY = new DefaultRequestQueueFactory();
 
     private static RequestQueueFactory sRequestQueueFactory = DEFAULT_REQUEST_QUEUE_FACTORY;
     private static RequestQueue sRequestQueue;
     private static ImageLoader sImageLoader;
 
-    private VolleyHolder() {
+    private VolleyProvider() {
     }
 
-    public static VolleyHolder get() {
+    public static VolleyProvider get() {
         return InstanceHolder.INSTANCE;
     }
 
@@ -43,7 +43,7 @@ public class VolleyHolder {
     }
 
     private static class InstanceHolder {
-        private static final VolleyHolder INSTANCE = new VolleyHolder();
+        private static final VolleyProvider INSTANCE = new VolleyProvider();
 
         private InstanceHolder() {
         }
