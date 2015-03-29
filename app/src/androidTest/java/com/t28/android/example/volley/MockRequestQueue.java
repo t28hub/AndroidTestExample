@@ -1,21 +1,25 @@
 package com.t28.android.example.volley;
 
-import android.support.annotation.Nullable;import com.android.volley.Cache;
+import android.support.annotation.Nullable;
+
+import com.android.volley.Cache;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.atomic.AtomicBoolean;
+
+import javax.annotation.concurrent.NotThreadSafe;
 
 /**
  * テスト用の{@link com.android.volley.RequestQueue}
  */
+@NotThreadSafe
 public class MockRequestQueue extends RequestQueue {
-    private final AtomicBoolean mIsPaused;
     private final NetworkDispatcher mNetworkDispatcher;
     private final Queue<Request<?>> mWaitingRequests;
 
+    private boolean mIsPaused;
     private RequestQueueListener mListener;
 
     /**
@@ -26,21 +30,24 @@ public class MockRequestQueue extends RequestQueue {
      */
     public MockRequestQueue(Cache cache, NetworkDispatcher dispatcher) {
         super(cache, new MockNetwork(dispatcher));
-        mIsPaused = new AtomicBoolean();
         mNetworkDispatcher = dispatcher;
         mWaitingRequests = new LinkedList<>();
     }
 
     @Override
     public <T> Request<T> add(Request<T> request) {
-        if (mListener != null) {
-            mListener.onRequestAdded(request);
-        }
-        if (mIsPaused.get()) {
+        final Request<T> addedRequest;
+        if (mIsPaused) {
             mWaitingRequests.add(request);
-            return request;
+            addedRequest = request;
+        } else {
+            addedRequest = super.add(request);
         }
-        return super.add(request);
+
+        if (mListener != null) {
+            mListener.onRequestAdded(addedRequest);
+        }
+        return addedRequest;
     }
 
     /**
@@ -65,10 +72,10 @@ public class MockRequestQueue extends RequestQueue {
      * リクエスト処理の再開
      */
     public void resume() {
-        if (!mIsPaused.get()) {
+        if (!mIsPaused) {
             return;
         }
-        mIsPaused.set(false);
+        mIsPaused = false;
 
         Request request;
         while ((request = mWaitingRequests.poll()) != null) {
@@ -80,7 +87,7 @@ public class MockRequestQueue extends RequestQueue {
      * リクエスト処理の一時停止
      */
     public void pause() {
-        mIsPaused.set(true);
+        mIsPaused = true;
     }
 
     /**
