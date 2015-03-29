@@ -77,4 +77,18 @@ public class MockRequestQueue extends RequestQueue {
         mWaitingRequests.clear();
         cancelAll(new AnyRequestFilter());
     }
+
+    /**
+     * RequestQueueの振る舞いを検知するリスナー
+     *
+     * @param <T> リクエストのレスポンス型
+     */
+    public interface RequestQueueListener<T> {
+        /**
+         * リクエストが追加された時に呼び出される
+         *
+         * @param request 追加されたリクエスト
+         */
+        void onRequestAdded(Request<T> request);
+    }
 }
