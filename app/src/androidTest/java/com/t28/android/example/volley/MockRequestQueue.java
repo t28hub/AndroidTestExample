@@ -108,6 +108,6 @@ public class MockRequestQueue extends RequestQueue {
          *
          * @param request 追加されたリクエスト
          */
-        void onRequestAdded(Request<?> request);
+        void onRequestAdded(Request request);
     }
 }

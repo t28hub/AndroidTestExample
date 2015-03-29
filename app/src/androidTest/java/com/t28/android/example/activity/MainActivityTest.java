@@ -192,11 +192,24 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         mRequestQueue.resume();
     }
 
-    private static class RequestQueueListener implements RequestQueue.RequestFinishedListener {
+    public static class RequestQueueListener implements MockRequestQueue.RequestQueueListener, RequestQueue.RequestFinishedListener {
+        private final CountingIdlingResource mIdlingResource;
+
+        public RequestQueueListener(CountingIdlingResource resource) {
+            if (resource == null) {
+                throw new NullPointerException("resource == null");
+            }
+            mIdlingResource = resource;
+        }
+
+        @Override
+        public void onRequestAdded(Request request) {
+            mIdlingResource.increment();
+        }
 
         @Override
         public void onRequestFinished(Request request) {
-
+            mIdlingResource.decrement();
         }
     }
 }
