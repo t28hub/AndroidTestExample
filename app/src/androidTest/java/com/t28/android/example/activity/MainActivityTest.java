@@ -9,7 +9,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.view.ViewPager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
-import android.view.View;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -24,8 +23,6 @@ import com.t28.android.example.volley.NetworkResponseBuilder;
 import com.t28.android.example.volley.StatusCode;
 import com.t28.android.example.volley.VolleyProvider;
 
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -40,10 +37,14 @@ import static android.support.test.espresso.Espresso.registerIdlingResources;
 import static android.support.test.espresso.Espresso.unregisterIdlingResources;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
+import static com.t28.android.example.test.Matchers.atPage;
+import static com.t28.android.example.test.Matchers.withChildId;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
+    private static final int PAGE_POSITION_FIRST = 0;
+
     private AssetReader mAssetReader;
     private MockRequestQueue mRequestQueue;
     private CountingIdlingResource mRequestIdlingResource;
@@ -124,26 +125,12 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         mRequestQueue.resume();
 
         final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
-        onView(new BaseMatcher<View>() {
-            @Override
-            public boolean matches(Object object) {
-                if (!(object instanceof View)) {
-                    return false;
-                }
-
-                final View actual = (View) object;
-                final View expected = pager.getChildAt(0);
-                if (!expected.equals(actual)) {
-                    return false;
-                }
-                return expected.findViewById(R.id.entry_list_success) != null;
-            }
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("");
-            }
-        }).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_loading))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_success))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_failure))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
     }
 
     @Test
