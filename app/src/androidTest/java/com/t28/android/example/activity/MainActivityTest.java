@@ -200,7 +200,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         @Override
         public boolean isIdleNow() {
-            return mCounter.get() != 0;
+            return mCounter.get() == 0;
         }
 
         @Override
