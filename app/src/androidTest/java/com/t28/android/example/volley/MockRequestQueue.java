@@ -1,6 +1,6 @@
 package com.t28.android.example.volley;
 
-import com.android.volley.Cache;
+import android.support.annotation.Nullable;import com.android.volley.Cache;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 
@@ -15,6 +15,8 @@ public class MockRequestQueue extends RequestQueue {
     private final AtomicBoolean mIsPaused;
     private final NetworkDispatcher mNetworkDispatcher;
     private final Queue<Request<?>> mWaitingRequests;
+
+    private RequestQueueListener mListener;
 
     /**
      * コンストラクタ
@@ -45,6 +47,15 @@ public class MockRequestQueue extends RequestQueue {
      */
     public NetworkDispatcher getNetworkDispatcher() {
         return mNetworkDispatcher;
+    }
+
+    /**
+     * RequestQueueListenerを登録する
+     *
+     * @param listener 登録するリスナー
+     */
+    public void setListener(@Nullable RequestQueueListener listener) {
+        mListener = listener;
     }
 
     /**

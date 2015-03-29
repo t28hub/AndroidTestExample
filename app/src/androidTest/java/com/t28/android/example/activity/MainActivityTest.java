@@ -3,6 +3,8 @@ package com.t28.android.example.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.IdlingResource;
+import android.support.test.espresso.contrib.CountingIdlingResource;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.view.ViewPager;
@@ -10,6 +12,8 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.t28.android.example.R;
 import com.t28.android.example.test.AssetReader;
 import com.t28.android.example.volley.BasicRequestMatcher;
@@ -32,6 +36,8 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.registerIdlingResources;
+import static android.support.test.espresso.Espresso.unregisterIdlingResources;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 
@@ -40,6 +46,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVi
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
     private AssetReader mAssetReader;
     private MockRequestQueue mRequestQueue;
+    private IdlingResource mRequestIdlingResource;
     private Activity mActivity;
 
     public MainActivityTest() {
@@ -61,12 +68,16 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         mRequestQueue = (MockRequestQueue) VolleyProvider.get().getRequestQueue(context);
         mRequestQueue.pause();
 
+        mRequestIdlingResource = new CountingIdlingResource(MockRequestQueue.class.getName());
+        registerIdlingResources(mRequestIdlingResource);
+
         mActivity = getActivity();
     }
 
     @After
     public void tearDown() throws Exception {
         mRequestQueue.clean();
+        unregisterIdlingResources(mRequestIdlingResource);
         super.tearDown();
     }
 
@@ -179,5 +190,13 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
                         .build()
         );
         mRequestQueue.resume();
+    }
+
+    private static class RequestQueueListener implements RequestQueue.RequestFinishedListener {
+
+        @Override
+        public void onRequestFinished(Request request) {
+
+        }
     }
 }
