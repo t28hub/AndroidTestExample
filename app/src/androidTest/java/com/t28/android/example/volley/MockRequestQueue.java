@@ -36,18 +36,16 @@ public class MockRequestQueue extends RequestQueue {
 
     @Override
     public <T> Request<T> add(Request<T> request) {
-        final Request<T> addedRequest;
         if (mIsPaused) {
             mWaitingRequests.add(request);
-            addedRequest = request;
-        } else {
-            addedRequest = super.add(request);
+            return request;
         }
 
+        // pause/resume状態によらずリスナーを呼び出すと完了したリクエスト数と整合性が保てなくなるため
         if (mRequestAddedListener != null) {
-            mRequestAddedListener.onRequestAdded(addedRequest);
+            mRequestAddedListener.onRequestAdded(request);
         }
-        return addedRequest;
+        return super.add(request);
     }
 
     /**
