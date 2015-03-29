@@ -3,17 +3,16 @@ package com.t28.android.example.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.IdlingResource;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.view.ViewPager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
-import android.text.TextUtils;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.t28.android.example.R;
 import com.t28.android.example.test.AssetReader;
+import com.t28.android.example.test.CountingIdlingResource;
 import com.t28.android.example.volley.BasicRequestMatcher;
 import com.t28.android.example.volley.MethodMatcher;
 import com.t28.android.example.volley.MockRequestQueue;
@@ -30,7 +29,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.registerIdlingResources;
@@ -179,52 +177,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
                         .build()
         );
         mRequestQueue.resume();
-    }
-
-    public static class CountingIdlingResource implements IdlingResource {
-        private final String mName;
-        private final AtomicInteger mCounter;
-
-        private ResourceCallback mResourceCallback;
-
-        public CountingIdlingResource(String name) {
-            if (TextUtils.isEmpty(name)) {
-                throw new IllegalArgumentException("'name' must not be empty");
-            }
-            mName = name;
-            mCounter = new AtomicInteger();
-        }
-
-        @Override
-        public String getName() {
-            return mName;
-        }
-
-        @Override
-        public boolean isIdleNow() {
-            return mCounter.get() == 0;
-        }
-
-        @Override
-        public void registerIdleTransitionCallback(ResourceCallback resourceCallback) {
-            mResourceCallback = resourceCallback;
-        }
-
-        public void increment() {
-            mCounter.incrementAndGet();
-        }
-
-        public void decrement() {
-            final int count = mCounter.decrementAndGet();
-            if (count > 0) {
-                return;
-            }
-            synchronized (this) {
-                if (mResourceCallback != null) {
-                    mResourceCallback.onTransitionToIdle();
-                }
-            }
-        }
     }
 
     public static class RequestQueueListener implements MockRequestQueue.RequestAddedListener, RequestQueue.RequestFinishedListener {
