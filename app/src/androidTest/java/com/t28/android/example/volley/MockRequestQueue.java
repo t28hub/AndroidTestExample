@@ -20,7 +20,7 @@ public class MockRequestQueue extends RequestQueue {
     private final Queue<Request<?>> mWaitingRequests;
 
     private boolean mIsPaused;
-    private RequestQueueListener mListener;
+    private RequestAddedListener mRequestAddedListener;
 
     /**
      * コンストラクタ
@@ -44,8 +44,8 @@ public class MockRequestQueue extends RequestQueue {
             addedRequest = super.add(request);
         }
 
-        if (mListener != null) {
-            mListener.onRequestAdded(addedRequest);
+        if (mRequestAddedListener != null) {
+            mRequestAddedListener.onRequestAdded(addedRequest);
         }
         return addedRequest;
     }
@@ -64,8 +64,8 @@ public class MockRequestQueue extends RequestQueue {
      *
      * @param listener 登録するリスナー
      */
-    public void setListener(@Nullable RequestQueueListener listener) {
-        mListener = listener;
+    public void setRequestAddedListener(@Nullable RequestAddedListener listener) {
+        mRequestAddedListener = listener;
     }
 
     /**
@@ -100,9 +100,9 @@ public class MockRequestQueue extends RequestQueue {
     }
 
     /**
-     * RequestQueueの振る舞いを検知するリスナー
+     * RequestQueueへのRequest追加を検知するリスナー
      */
-    public interface RequestQueueListener {
+    public interface RequestAddedListener {
         /**
          * リクエストが追加された時に呼び出される
          *
