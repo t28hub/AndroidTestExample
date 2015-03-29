@@ -9,6 +9,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.view.ViewPager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.text.TextUtils;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -70,7 +71,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         mRequestQueue = (MockRequestQueue) VolleyProvider.get().getRequestQueue(context);
         mRequestQueue.pause();
 
-        mRequestIdlingResource = new CountingIdlingResource();
+        mRequestIdlingResource = new CountingIdlingResource(RequestQueue.class.getName());
         registerIdlingResources(mRequestIdlingResource);
 
         final RequestQueueListener queueListener = new RequestQueueListener(mRequestIdlingResource);
@@ -185,17 +186,22 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     public static class CountingIdlingResource implements IdlingResource {
+        private final String mName;
         private final AtomicInteger mCounter;
 
         private ResourceCallback mResourceCallback;
 
-        public CountingIdlingResource() {
+        public CountingIdlingResource(String name) {
+            if (TextUtils.isEmpty(name)) {
+                throw new IllegalArgumentException("'name' must not be empty");
+            }
+            mName = name;
             mCounter = new AtomicInteger();
         }
 
         @Override
         public String getName() {
-            return CountingIdlingResource.class.getCanonicalName();
+            return mName;
         }
 
         @Override
