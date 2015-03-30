@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import com.t28.android.example.R;
 import com.t28.android.example.data.adapter.FragmentAdapter;
 import com.t28.android.example.fragment.EntryListFragment;
+import com.t28.android.example.view.SlidingTabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,9 @@ import butterknife.InjectView;
 
 
 public class MainActivity extends ActionBarActivity {
+    @InjectView(R.id.main_sliding_tab)
+    SlidingTabLayout mSlidingTab;
+
     @InjectView(R.id.main_view_pager)
     ViewPager mFragmentPager;
 
@@ -58,6 +62,8 @@ public class MainActivity extends ActionBarActivity {
         });
         final PagerAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), creators);
         mFragmentPager.setAdapter(adapter);
+
+        mSlidingTab.setViewPager(mFragmentPager);
     }
 
     @Override
