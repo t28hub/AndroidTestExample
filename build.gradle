@@ -4,12 +4,14 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.1.0'
+        classpath "com.newrelic.agent.android:agent-gradle-plugin:4.273.4"
     }
 }
 
 allprojects {
     repositories {
         jcenter()
+        mavenCentral()
         maven {
             url "https://oss.sonatype.org/content/repositories/snapshots"
         }
