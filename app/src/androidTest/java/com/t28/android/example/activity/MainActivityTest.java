@@ -37,6 +37,7 @@ import static com.t28.android.example.test.Assertions.isGone;
 import static com.t28.android.example.test.Assertions.isVisible;
 import static com.t28.android.example.test.Matchers.atPage;
 import static com.t28.android.example.test.Matchers.withChildId;
+import static org.assertj.android.api.Assertions.assertThat;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -127,9 +128,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         mRequestQueue.resume();
 
         final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_loading)).check(isGone());
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_success)).check(isVisible());
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_failure)).check(isGone());
+        assertThat(pager.findViewById(R.id.entry_list_loading)).isGone();
+        assertThat(pager.findViewById(R.id.entry_list_success)).isVisible();
+        assertThat(pager.findViewById(R.id.entry_list_failure)).isGone();
     }
 
     /**
