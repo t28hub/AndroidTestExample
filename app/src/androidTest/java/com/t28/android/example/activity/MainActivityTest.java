@@ -30,13 +30,8 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
-import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.registerIdlingResources;
 import static android.support.test.espresso.Espresso.unregisterIdlingResources;
-import static com.t28.android.example.test.Assertions.isGone;
-import static com.t28.android.example.test.Assertions.isVisible;
-import static com.t28.android.example.test.Matchers.atPage;
-import static com.t28.android.example.test.Matchers.withChildId;
 import static org.assertj.android.api.Assertions.assertThat;
 
 @RunWith(AndroidJUnit4.class)
@@ -101,9 +96,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     @Test
     public void entryListFragment_shouldShowLoadingViewWhenWaitingForResponse() {
         final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_loading)).check(isVisible());
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_success)).check(isGone());
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_failure)).check(isGone());
+        assertThat(pager.findViewById(R.id.entry_list_loading)).isVisible();
+        assertThat(pager.findViewById(R.id.entry_list_success)).isGone();
+        assertThat(pager.findViewById(R.id.entry_list_failure)).isGone();
     }
 
     /**
@@ -155,9 +150,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         mRequestQueue.resume();
 
         final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_loading)).check(isGone());
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_success)).check(isVisible());
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_failure)).check(isGone());
+        assertThat(pager.findViewById(R.id.entry_list_loading)).isGone();
+        assertThat(pager.findViewById(R.id.entry_list_success)).isVisible();
+        assertThat(pager.findViewById(R.id.entry_list_failure)).isGone();
     }
 
     /**
@@ -182,9 +177,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         mRequestQueue.resume();
 
         final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_loading)).check(isGone());
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_success)).check(isVisible());
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_failure)).check(isGone());
+        assertThat(pager.findViewById(R.id.entry_list_loading)).isGone();
+        assertThat(pager.findViewById(R.id.entry_list_success)).isVisible();
+        assertThat(pager.findViewById(R.id.entry_list_failure)).isGone();
     }
 
     /**
@@ -209,9 +204,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         mRequestQueue.resume();
 
         final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_loading)).check(isGone());
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_success)).check(isGone());
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_failure)).check(isVisible());
+        assertThat(pager.findViewById(R.id.entry_list_loading)).isGone();
+        assertThat(pager.findViewById(R.id.entry_list_success)).isGone();
+        assertThat(pager.findViewById(R.id.entry_list_failure)).isVisible();
     }
 
     /**
@@ -236,9 +231,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         mRequestQueue.resume();
 
         final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_loading)).check(isGone());
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_success)).check(isGone());
-        onView(withChildId(atPage(pager, PAGE_POSITION_FIRST), R.id.entry_list_failure)).check(isVisible());
+        assertThat(pager.findViewById(R.id.entry_list_loading)).isGone();
+        assertThat(pager.findViewById(R.id.entry_list_success)).isGone();
+        assertThat(pager.findViewById(R.id.entry_list_failure)).isVisible();
     }
 
     public static class RequestQueueListener implements MockRequestQueue.RequestAddedListener, RequestQueue.RequestFinishedListener {
