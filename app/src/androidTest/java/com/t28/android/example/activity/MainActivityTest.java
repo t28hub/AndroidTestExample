@@ -42,7 +42,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     private AssetReader mAssetReader;
     private MockRequestQueue mRequestQueue;
     private CountingIdlingResource mRequestIdlingResource;
-    private Activity mActivity;
 
     public MainActivityTest() {
         super(MainActivity.class);
@@ -70,8 +69,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         final RequestQueueListener queueListener = new RequestQueueListener(mRequestIdlingResource);
         mRequestQueue.setRequestAddedListener(queueListener);
         mRequestQueue.addRequestFinishedListener(queueListener);
-
-        mActivity = getActivity();
     }
 
     @After
@@ -95,7 +92,8 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      */
     @Test
     public void entryListFragment_shouldShowLoadingViewWhenWaitingForResponse() {
-        final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
+        final Activity activity = getActivity();
+        final ViewPager pager = (ViewPager) activity.findViewById(R.id.main_view_pager);
         assertThat(pager.findViewById(R.id.entry_list_loading)).isVisible();
         assertThat(pager.findViewById(R.id.entry_list_success)).isGone();
         assertThat(pager.findViewById(R.id.entry_list_failure)).isGone();
@@ -122,7 +120,8 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         );
         mRequestQueue.resume();
 
-        final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
+        final Activity activity = getActivity();
+        final ViewPager pager = (ViewPager) activity.findViewById(R.id.main_view_pager);
         assertThat(pager.findViewById(R.id.entry_list_loading)).isGone();
         assertThat(pager.findViewById(R.id.entry_list_success)).isVisible();
         assertThat(pager.findViewById(R.id.entry_list_failure)).isGone();
@@ -149,7 +148,8 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         );
         mRequestQueue.resume();
 
-        final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
+        final Activity activity = getActivity();
+        final ViewPager pager = (ViewPager) activity.findViewById(R.id.main_view_pager);
         assertThat(pager.findViewById(R.id.entry_list_loading)).isGone();
         assertThat(pager.findViewById(R.id.entry_list_success)).isVisible();
         assertThat(pager.findViewById(R.id.entry_list_failure)).isGone();
@@ -176,7 +176,8 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         );
         mRequestQueue.resume();
 
-        final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
+        final Activity activity = getActivity();
+        final ViewPager pager = (ViewPager) activity.findViewById(R.id.main_view_pager);
         assertThat(pager.findViewById(R.id.entry_list_loading)).isGone();
         assertThat(pager.findViewById(R.id.entry_list_success)).isVisible();
         assertThat(pager.findViewById(R.id.entry_list_failure)).isGone();
@@ -188,7 +189,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      * @throws IOException assetファイル読み込みに失敗した場合
      */
     @Test
-    public void entryListFragment_shouldShowFailureViewWhenResponseReturnsNotLoaded() throws IOException {
+    public void entryListFragment_shouldShowFailureViewWhenResponseReturnsNotLoaded() throws Throwable {
         final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
         dispatcher.append(
                 new BasicRequestMatcher.Builder()
@@ -203,7 +204,8 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         );
         mRequestQueue.resume();
 
-        final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
+        final Activity activity = getActivity();
+        final ViewPager pager = (ViewPager) activity.findViewById(R.id.main_view_pager);
         assertThat(pager.findViewById(R.id.entry_list_loading)).isGone();
         assertThat(pager.findViewById(R.id.entry_list_success)).isGone();
         assertThat(pager.findViewById(R.id.entry_list_failure)).isVisible();
@@ -215,7 +217,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      * @throws IOException assetファイル読み込みに失敗した場合
      */
     @Test
-    public void entryListFragment_shouldShowFailureViewWhenResponseReturnsInvalidVersion() throws IOException {
+    public void entryListFragment_shouldShowFailureViewWhenResponseReturnsInvalidVersion() throws Throwable {
         final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
         dispatcher.append(
                 new BasicRequestMatcher.Builder()
@@ -230,7 +232,8 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         );
         mRequestQueue.resume();
 
-        final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
+        final Activity activity = getActivity();
+        final ViewPager pager = (ViewPager) activity.findViewById(R.id.main_view_pager);
         assertThat(pager.findViewById(R.id.entry_list_loading)).isGone();
         assertThat(pager.findViewById(R.id.entry_list_success)).isGone();
         assertThat(pager.findViewById(R.id.entry_list_failure)).isVisible();
