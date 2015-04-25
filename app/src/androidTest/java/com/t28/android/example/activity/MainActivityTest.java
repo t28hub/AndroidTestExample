@@ -238,7 +238,10 @@ public class MainActivityTest {
 
         @Override
         public void onRequestFinished(Request request) {
-            mIdlingResource.decrement();
+            try {
+                mIdlingResource.decrement();
+            } catch (IllegalStateException ignore) {
+            }
         }
     }
 }
