@@ -53,7 +53,7 @@ public class MainActivityTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         final Context context = InstrumentationRegistry.getContext();
         mAssetReader = new AssetReader(context.getAssets());
 
@@ -69,7 +69,7 @@ public class MainActivityTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         mRequestQueue.clean();
         unregisterIdlingResources(mRequestIdlingResource);
     }
