@@ -48,6 +48,9 @@ dependencies {
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.1'
+    androidTestCompile ('com.github.tomakehurst:wiremock:1.55') {
+        exclude group: 'com.fasterxml.jackson.core', module: 'jackson-core'
+    }
     androidTestCompile ('com.squareup.assertj:assertj-android:1.0.0') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
