@@ -2,10 +2,11 @@ package com.t28.android.example.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.view.ViewPager;
-import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
 
 import com.android.volley.Request;
@@ -25,6 +26,7 @@ import com.t28.android.example.volley.VolleyProvider;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -34,17 +36,17 @@ import static android.support.test.espresso.Espresso.registerIdlingResources;
 import static android.support.test.espresso.Espresso.unregisterIdlingResources;
 import static org.assertj.android.api.Assertions.assertThat;
 
-@RunWith(AndroidJUnit4.class)
 @LargeTest
-public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
-    private static final int PAGE_POSITION_FIRST = 0;
+@RunWith(AndroidJUnit4.class)
+public class MainActivityTest {
+    @Rule
+    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class, true, false);
 
     private AssetReader mAssetReader;
     private MockRequestQueue mRequestQueue;
     private CountingIdlingResource mRequestIdlingResource;
 
     public MainActivityTest() {
-        super(MainActivity.class);
     }
 
     @BeforeClass
@@ -54,9 +56,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-
         final Context context = InstrumentationRegistry.getContext();
         mAssetReader = new AssetReader(context.getAssets());
 
@@ -75,16 +74,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     public void tearDown() throws Exception {
         mRequestQueue.clean();
         unregisterIdlingResources(mRequestIdlingResource);
-        super.tearDown();
-    }
-
-    /**
-     * <p>
-     * NOTE: テスト実行時にJUnit3系のテストメソッドが存在しないと他のテストメソッドも実行されない。
-     * </p>
-     */
-    @Test
-    public void test_activityShouldNotNull() {
     }
 
     /**
@@ -237,6 +226,11 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         assertThat(pager.findViewById(R.id.entry_list_loading)).isGone();
         assertThat(pager.findViewById(R.id.entry_list_success)).isGone();
         assertThat(pager.findViewById(R.id.entry_list_failure)).isVisible();
+    }
+
+    private MainActivity getActivity() {
+        final Intent launchIntent = new Intent();
+        return mActivityRule.launchActivity(launchIntent);
     }
 
     public static class RequestQueueListener implements MockRequestQueue.RequestAddedListener, RequestQueue.RequestFinishedListener {
