@@ -21,7 +21,6 @@ android {
     }
     packagingOptions {
         exclude 'LICENSE.txt'
-        exclude 'META-INF/LICENSE'
         exclude 'META-INF/LICENSE.txt'
     }
 }
@@ -53,9 +52,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude module: 'recyclerview-v7'
-    }
-    androidTestCompile ('com.github.tomakehurst:wiremock:1.55') {
-        exclude group: 'com.fasterxml.jackson.core', module: 'jackson-core'
     }
     androidTestCompile ('com.squareup.assertj:assertj-android:1.0.0') {
         exclude group: 'com.android.support', module: 'support-annotations'

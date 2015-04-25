@@ -3,7 +3,6 @@ package com.t28.android.example.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.contrib.CountingIdlingResource;
 import android.support.test.rule.ActivityTestRule;
@@ -13,8 +12,6 @@ import android.test.suitebuilder.annotation.LargeTest;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.t28.android.example.R;
 import com.t28.android.example.test.AssetReader;
 import com.t28.android.example.volley.BasicRequestMatcher;
@@ -23,7 +20,6 @@ import com.t28.android.example.volley.MockRequestQueue;
 import com.t28.android.example.volley.MockRequestQueueFactory;
 import com.t28.android.example.volley.NetworkDispatcher;
 import com.t28.android.example.volley.NetworkResponseBuilder;
-import com.t28.android.example.volley.RequestQueueFactory;
 import com.t28.android.example.volley.StatusCode;
 import com.t28.android.example.volley.VolleyProvider;
 
@@ -35,14 +31,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 
 import static android.support.test.espresso.Espresso.registerIdlingResources;
 import static android.support.test.espresso.Espresso.unregisterIdlingResources;
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static org.assertj.android.api.Assertions.assertThat;
 
 @LargeTest
@@ -50,9 +41,6 @@ import static org.assertj.android.api.Assertions.assertThat;
 public class MainActivityTest {
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class, true, false);
-
-    @Rule
-    public WireMockRule mWireMockRule = new WireMockRule(8080);
 
     private AssetReader mAssetReader;
     private MockRequestQueue mRequestQueue;
@@ -107,19 +95,6 @@ public class MainActivityTest {
      */
     @Test
     public void entryListFragment_shouldShowSuccessViewWhenResponseHasNoEntry() throws IOException {
-        VolleyProvider.injectRequestQueueFactory(new RequestQueueFactory() {
-            @NonNull
-            @Override
-            public RequestQueue create(Context context) {
-                return Volley.newRequestQueue(InstrumentationRegistry.getTargetContext());
-            }
-        });
-        stubFor(get(urlMatching("/ajax/services/feed/load.+"))
-                .willReturn(aResponse()
-                        .withStatus(HttpURLConnection.HTTP_OK)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody(mAssetReader.read("feed_load_success_0.json"))));
-        /*
         final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
         dispatcher.append(
                 new BasicRequestMatcher.Builder()
@@ -132,7 +107,6 @@ public class MainActivityTest {
                         .setBody(mAssetReader.read("feed_load_success_0.json"))
                         .build()
         );
-        */
         mRequestQueue.resume();
 
         final Activity activity = getActivity();
