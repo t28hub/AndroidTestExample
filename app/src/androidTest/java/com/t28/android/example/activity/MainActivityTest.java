@@ -30,8 +30,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
-
 import static android.support.test.espresso.Espresso.registerIdlingResources;
 import static android.support.test.espresso.Espresso.unregisterIdlingResources;
 import static org.assertj.android.api.Assertions.assertThat;
@@ -90,11 +88,9 @@ public class MainActivityTest {
 
     /**
      * エントリーが存在しない場合にSuccessViewが表示される
-     *
-     * @throws IOException assetファイル読み込みに失敗した場合
      */
     @Test
-    public void entryListFragment_shouldShowSuccessViewWhenResponseHasNoEntry() throws IOException {
+    public void entryListFragment_shouldShowSuccessViewWhenResponseHasNoEntry() {
         final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
         dispatcher.append(
                 new BasicRequestMatcher.Builder()
@@ -118,11 +114,9 @@ public class MainActivityTest {
 
     /**
      * エントリーが存在する場合にSuccessViewが表示される
-     *
-     * @throws IOException assetファイル読み込みに失敗した場合
      */
     @Test
-    public void entryListFragment_shouldShowSuccessViewWhenResponseHasEntry() throws IOException {
+    public void entryListFragment_shouldShowSuccessViewWhenResponseHasEntry() {
         final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
         dispatcher.append(
                 new BasicRequestMatcher.Builder()
@@ -146,11 +140,9 @@ public class MainActivityTest {
 
     /**
      * エントリーが複数存在する場合にSuccessViewが表示される
-     *
-     * @throws IOException assetファイル読み込みに失敗した場合
      */
     @Test
-    public void entryListFragment_shouldShowSuccessViewWhenResponseHasEntries() throws IOException {
+    public void entryListFragment_shouldShowSuccessViewWhenResponseHasEntries() {
         final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
         dispatcher.append(
                 new BasicRequestMatcher.Builder()
@@ -174,11 +166,9 @@ public class MainActivityTest {
 
     /**
      * 読込失敗時にFailureViewが表示される
-     *
-     * @throws IOException assetファイル読み込みに失敗した場合
      */
     @Test
-    public void entryListFragment_shouldShowFailureViewWhenResponseReturnsNotLoaded() throws Throwable {
+    public void entryListFragment_shouldShowFailureViewWhenResponseReturnsNotLoaded() {
         final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
         dispatcher.append(
                 new BasicRequestMatcher.Builder()
@@ -202,11 +192,9 @@ public class MainActivityTest {
 
     /**
      * 読込失敗時にFailureViewが表示される
-     *
-     * @throws IOException assetファイル読み込みに失敗した場合
      */
     @Test
-    public void entryListFragment_shouldShowFailureViewWhenResponseReturnsInvalidVersion() throws Throwable {
+    public void entryListFragment_shouldShowFailureViewWhenResponseReturnsInvalidVersion() {
         final NetworkDispatcher dispatcher = mRequestQueue.getNetworkDispatcher();
         dispatcher.append(
                 new BasicRequestMatcher.Builder()
