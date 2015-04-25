@@ -63,9 +63,8 @@ public class AssetReader {
      *
      * @param fileName ファイル名
      * @return ファイルの内容
-     * @throws IOException ファイル読込に失敗した場合
      */
-    public byte[] read(String fileName) throws IOException {
+    public byte[] read(String fileName) {
         BufferedInputStream input = null;
         ByteArrayOutputStream output = null;
         try {
@@ -76,6 +75,8 @@ public class AssetReader {
                 output.write(buffer);
             }
             return output.toByteArray();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read an asset file:" + fileName, e);
         } finally {
             IoUtils.close(input);
             IoUtils.close(output);
