@@ -1,7 +1,6 @@
 package com.t28.android.example.pages;
 
 import android.support.test.espresso.ViewInteraction;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -10,6 +9,7 @@ import android.widget.TextView;
 
 import com.t28.android.example.R;
 import com.t28.android.example.activity.MainActivity;
+import com.t28.android.example.data.adapter.FragmentAdapter;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
@@ -33,7 +33,7 @@ public class Main {
     }
 
     private ViewInteraction findTabAt(int position) {
-        final FragmentPagerAdapter adapter = getPagerAdapter();
+        final FragmentAdapter adapter = getPagerAdapter();
         final CharSequence title = adapter.getPageTitle(position);
         return onView(new TypeSafeMatcher<View>() {
             @Override
@@ -53,9 +53,9 @@ public class Main {
         });
     }
 
-    private FragmentPagerAdapter getPagerAdapter() {
+    private FragmentAdapter getPagerAdapter() {
         final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
         final PagerAdapter adapter = pager.getAdapter();
-        return (FragmentPagerAdapter) adapter;
+        return (FragmentAdapter) adapter;
     }
 }
