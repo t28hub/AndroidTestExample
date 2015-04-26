@@ -222,6 +222,8 @@ public class MainActivityTest {
         final MainActivity activity = getActivity();
         final Main main = new Main(activity);
         main.showOptionsMenu();
+        main.selectOptionsMenu(R.id.action_refresh);
+        Thread.sleep(2000);
     }
 
     private MainActivity getActivity() {
