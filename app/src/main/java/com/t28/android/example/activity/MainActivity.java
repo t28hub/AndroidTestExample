@@ -32,9 +32,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
-        final List<FragmentAdapter.FragmentFactory> factories = new ArrayList<>();
-        factories.add(new EntryListFragment.Factory("http://b.hatena.ne.jp/hotentry.rss", "総合"));
-        factories.add(new EntryListFragment.Factory("http://b.hatena.ne.jp/hotentry/it.rss", "テクノロジー"));
+        final List<FragmentAdapter.FragmentFactory> factories = createFactories();
         final PagerAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), factories);
         mFragmentPager.setAdapter(adapter);
 
@@ -54,5 +52,19 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private List<FragmentAdapter.FragmentFactory> createFactories() {
+        final List<FragmentAdapter.FragmentFactory> factories = new ArrayList<>();
+        factories.add(new EntryListFragment.Factory("http://b.hatena.ne.jp/hotentry.rss", "総合"));
+        factories.add(new EntryListFragment.Factory("http://b.hatena.ne.jp/hotentry/general.rss", "一般"));
+        factories.add(new EntryListFragment.Factory("http://b.hatena.ne.jp/hotentry/social.rss", "世の中"));
+        factories.add(new EntryListFragment.Factory("http://b.hatena.ne.jp/hotentry/economics.rss", "政治と経済"));
+        factories.add(new EntryListFragment.Factory("http://b.hatena.ne.jp/hotentry/life.rss", "暮らし"));
+        factories.add(new EntryListFragment.Factory("http://b.hatena.ne.jp/hotentry/knowledge.rss", "学び"));
+        factories.add(new EntryListFragment.Factory("http://b.hatena.ne.jp/hotentry/it.rss", "テクノロジー"));
+        factories.add(new EntryListFragment.Factory("http://b.hatena.ne.jp/hotentry/fun.rss", "おもしろ"));
+        factories.add(new EntryListFragment.Factory("http://b.hatena.ne.jp/hotentry/entertainment.rss", "エンタメ"));
+        return factories;
     }
 }
