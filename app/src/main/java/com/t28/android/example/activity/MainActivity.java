@@ -33,8 +33,8 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
-        final List<FragmentAdapter.FragmentCreator> creators = new ArrayList<>();
-        creators.add(new FragmentAdapter.FragmentCreator() {
+        final List<FragmentAdapter.FragmentFactory> creators = new ArrayList<>();
+        creators.add(new FragmentAdapter.FragmentFactory() {
             private static final String FEED_URL = "http://feeds.feedburner.com/hatena/b/hotentry";
 
             @Override
@@ -47,7 +47,7 @@ public class MainActivity extends ActionBarActivity {
                 return FEED_URL;
             }
         });
-        creators.add(new FragmentAdapter.FragmentCreator() {
+        creators.add(new FragmentAdapter.FragmentFactory() {
             private static final String FEED_URL = "http://feeds.feedburner.com/blogspot/hsDu";
 
             @Override

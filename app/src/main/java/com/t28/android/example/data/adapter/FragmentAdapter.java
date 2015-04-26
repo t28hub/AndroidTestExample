@@ -9,35 +9,35 @@ import java.util.Collections;
 import java.util.List;
 
 public class FragmentAdapter extends FragmentStatePagerAdapter {
-    private final List<FragmentCreator> mFragmentCreators;
+    private final List<FragmentFactory> mFragmentFactories;
 
-    public FragmentAdapter(FragmentManager manager, List<FragmentCreator> creators) {
+    public FragmentAdapter(FragmentManager manager, List<FragmentFactory> creators) {
         super(manager);
         if (creators == null) {
-            mFragmentCreators = Collections.emptyList();
+            mFragmentFactories = Collections.emptyList();
         } else {
-            mFragmentCreators = new ArrayList<>(creators);
+            mFragmentFactories = new ArrayList<>(creators);
         }
     }
 
     @Override
     public Fragment getItem(int position) {
-        final FragmentCreator creator = mFragmentCreators.get(position);
+        final FragmentFactory creator = mFragmentFactories.get(position);
         return creator.create();
     }
 
     @Override
     public int getCount() {
-        return mFragmentCreators.size();
+        return mFragmentFactories.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        final FragmentCreator creator = mFragmentCreators.get(position);
-        return creator.getTitle();
+        final FragmentFactory factory = mFragmentFactories.get(position);
+        return factory.getTitle();
     }
 
-    public interface FragmentCreator {
+    public interface FragmentFactory {
         public Fragment create();
 
         public CharSequence getTitle();
