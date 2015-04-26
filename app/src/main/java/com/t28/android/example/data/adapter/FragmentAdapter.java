@@ -38,8 +38,8 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
     }
 
     public interface FragmentFactory {
-        public Fragment create();
+        Fragment create();
 
-        public CharSequence getTitle();
+        CharSequence getTitle();
     }
 }
