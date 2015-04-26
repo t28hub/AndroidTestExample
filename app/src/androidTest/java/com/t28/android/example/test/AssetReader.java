@@ -27,7 +27,7 @@ import java.io.IOException;
  */
 public class AssetReader {
     private static final int END_OF_FILE = -1;
-    private static final int DEFAULT_BUFFER_SIZE = 1024;
+    private static final int DEFAULT_BUFFER_SIZE = 1 << 12;
 
     private final AssetManager mManager;
     private final int mBufferSize;
