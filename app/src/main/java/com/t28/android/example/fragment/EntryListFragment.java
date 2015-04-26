@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.t28.android.example.R;
 import com.t28.android.example.api.request.FeedRequest;
 import com.t28.android.example.data.adapter.EntryListAdapter;
+import com.t28.android.example.data.adapter.FragmentAdapter;
 import com.t28.android.example.data.model.Entry;
 import com.t28.android.example.data.model.Feed;
 import com.t28.android.example.view.StatefulFrameLayout;
@@ -150,5 +152,33 @@ public class EntryListFragment extends Fragment implements EntryListAdapter.OnEn
         arguments.putInt(EXTRA_ENTRY_COUNT, entryCount);
         instance.setArguments(arguments);
         return instance;
+    }
+
+    public static class Factory implements FragmentAdapter.FragmentFactory {
+        private static final int MAX_ENTRY_COUNT = 100;
+
+        private final String mUrl;
+        private final String mTitle;
+
+        public Factory(String url, String title) {
+            if (TextUtils.isEmpty(url)) {
+                throw new IllegalArgumentException("'url' must not be empty");
+            }
+            if (TextUtils.isEmpty(title)) {
+                throw new IllegalArgumentException("'title' must not be empty");
+            }
+            mUrl = url;
+            mTitle = title;
+        }
+
+        @Override
+        public Fragment create() {
+            return newInstance(mUrl, MAX_ENTRY_COUNT);
+        }
+
+        @Override
+        public CharSequence getTitle() {
+            return mTitle;
+        }
     }
 }
