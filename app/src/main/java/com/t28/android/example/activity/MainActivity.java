@@ -1,7 +1,6 @@
 package com.t28.android.example.activity;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -33,34 +32,10 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
-        final List<FragmentAdapter.FragmentFactory> creators = new ArrayList<>();
-        creators.add(new FragmentAdapter.FragmentFactory() {
-            private static final String FEED_URL = "http://feeds.feedburner.com/hatena/b/hotentry";
-
-            @Override
-            public Fragment create() {
-                return EntryListFragment.newInstance(FEED_URL, 50);
-            }
-
-            @Override
-            public CharSequence getTitle() {
-                return FEED_URL;
-            }
-        });
-        creators.add(new FragmentAdapter.FragmentFactory() {
-            private static final String FEED_URL = "http://feeds.feedburner.com/blogspot/hsDu";
-
-            @Override
-            public Fragment create() {
-                return EntryListFragment.newInstance(FEED_URL, 50);
-            }
-
-            @Override
-            public CharSequence getTitle() {
-                return FEED_URL;
-            }
-        });
-        final PagerAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), creators);
+        final List<FragmentAdapter.FragmentFactory> factories = new ArrayList<>();
+        factories.add(new EntryListFragment.Factory("http://b.hatena.ne.jp/hotentry.rss", "総合"));
+        factories.add(new EntryListFragment.Factory("http://b.hatena.ne.jp/hotentry/it.rss", "テクノロジー"));
+        final PagerAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), factories);
         mFragmentPager.setAdapter(adapter);
 
         mSlidingTab.setViewPager(mFragmentPager);
