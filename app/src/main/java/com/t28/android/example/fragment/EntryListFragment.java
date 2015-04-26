@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -42,6 +43,7 @@ public class EntryListFragment extends Fragment implements EntryListAdapter.OnEn
      * @see #newInstance(String, int)
      */
     public EntryListFragment() {
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -83,6 +85,16 @@ public class EntryListFragment extends Fragment implements EntryListAdapter.OnEn
     public void onPause() {
         super.onPause();
         cancel();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        final int itemId = item.getItemId();
+        if (itemId == R.id.action_refresh) {
+            refresh();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
