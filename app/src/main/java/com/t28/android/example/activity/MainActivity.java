@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.t28.android.example.R;
@@ -20,6 +20,9 @@ import butterknife.InjectView;
 
 
 public class MainActivity extends ActionBarActivity {
+    @InjectView(R.id.main_toolbar)
+    Toolbar mToolbar;
+
     @InjectView(R.id.main_sliding_tab)
     SlidingTabLayout mSlidingTab;
 
@@ -32,26 +35,24 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
+        setSupportActionBar(mToolbar);
+        mToolbar.inflateMenu(R.menu.menu_main);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                final int id = item.getItemId();
+                if (id == R.id.action_settings) {
+                    return true;
+                }
+                return false;
+            }
+        });
+
         final List<FragmentAdapter.FragmentFactory> factories = createFactories();
         final PagerAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), factories);
         mFragmentPager.setAdapter(adapter);
 
         mSlidingTab.setViewPager(mFragmentPager);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        final int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private List<FragmentAdapter.FragmentFactory> createFactories() {
