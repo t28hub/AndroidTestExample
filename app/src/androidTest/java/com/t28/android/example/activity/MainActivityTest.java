@@ -13,6 +13,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.t28.android.example.R;
+import com.t28.android.example.pages.Main;
 import com.t28.android.example.test.AssetReader;
 import com.t28.android.example.volley.BasicRequestMatcher;
 import com.t28.android.example.volley.MethodMatcher;
@@ -214,6 +215,13 @@ public class MainActivityTest {
         assertThat(pager.findViewById(R.id.entry_list_loading)).isGone();
         assertThat(pager.findViewById(R.id.entry_list_success)).isGone();
         assertThat(pager.findViewById(R.id.entry_list_failure)).isVisible();
+    }
+
+    @Test
+    public void pageObjectShouldWorkApproprietely() throws InterruptedException {
+        final MainActivity activity = getActivity();
+        final Main main = new Main(activity);
+        main.clickOptionsMenu();
     }
 
     private MainActivity getActivity() {

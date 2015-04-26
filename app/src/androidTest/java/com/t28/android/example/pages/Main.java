@@ -3,6 +3,7 @@ package com.t28.android.example.pages;
 import android.support.test.espresso.ViewInteraction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewParent;
@@ -26,6 +27,12 @@ public class Main {
             throw new NullPointerException("activity == null");
         }
         mActivity = activity;
+    }
+
+    public void clickOptionsMenu() {
+        final Toolbar toolbar = (Toolbar) mActivity.findViewById(R.id.main_toolbar);
+        toolbar.showOverflowMenu();
+        //openActionBarOverflowOrOptionsMenu(mActivity);
     }
 
     public void clickTabAt(int position) {
