@@ -16,10 +16,20 @@ import com.t28.android.example.view.SlidingTabLayout;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 
 public class Main {
+    @InjectView(R.id.main_toolbar)
+    Toolbar mToolbar;
+    @InjectView(R.id.main_sliding_tab)
+    SlidingTabLayout mSlidingTabLayout;
+    @InjectView(R.id.main_view_pager)
+    ViewPager mViewPager;
+
     private final MainActivity mActivity;
 
     public Main(MainActivity activity) {
@@ -27,12 +37,11 @@ public class Main {
             throw new NullPointerException("activity == null");
         }
         mActivity = activity;
+        ButterKnife.inject(this, mActivity);
     }
 
     public void clickOptionsMenu() {
-        final Toolbar toolbar = (Toolbar) mActivity.findViewById(R.id.main_toolbar);
-        toolbar.showOverflowMenu();
-        //openActionBarOverflowOrOptionsMenu(mActivity);
+        mToolbar.showOverflowMenu();
     }
 
     public void clickTabAt(int position) {
@@ -47,8 +56,7 @@ public class Main {
     }
 
     private PagerAdapter getPagerAdapter() {
-        final ViewPager pager = (ViewPager) mActivity.findViewById(R.id.main_view_pager);
-        return pager.getAdapter();
+        return mViewPager.getAdapter();
     }
 
     static class SlidingTabTitleMatcher extends TypeSafeMatcher<View> {
