@@ -40,8 +40,12 @@ public class Main {
         ButterKnife.inject(this, mActivity);
     }
 
-    public void clickOptionsMenu() {
+    public void showOptionsMenu() {
         mToolbar.showOverflowMenu();
+    }
+
+    public void hideOptionsMenu() {
+        mToolbar.hideOverflowMenu();
     }
 
     public void clickTabAt(int position) {

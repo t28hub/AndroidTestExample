@@ -221,7 +221,7 @@ public class MainActivityTest {
     public void pageObjectShouldWorkApproprietely() throws InterruptedException {
         final MainActivity activity = getActivity();
         final Main main = new Main(activity);
-        main.clickOptionsMenu();
+        main.showOptionsMenu();
     }
 
     private MainActivity getActivity() {
