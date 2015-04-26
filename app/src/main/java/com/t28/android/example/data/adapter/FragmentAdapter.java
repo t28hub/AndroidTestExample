@@ -22,8 +22,7 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        final FragmentFactory creator = mFragmentFactories.get(position);
-        return creator.create();
+        return getFactory(position).create();
     }
 
     @Override
@@ -33,8 +32,11 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        final FragmentFactory factory = mFragmentFactories.get(position);
-        return factory.getTitle();
+        return getFactory(position).getTitle();
+    }
+
+    private FragmentFactory getFactory(int position) {
+        return mFragmentFactories.get(position);
     }
 
     public interface FragmentFactory {
