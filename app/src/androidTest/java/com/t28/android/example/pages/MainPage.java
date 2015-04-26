@@ -19,8 +19,6 @@ import com.t28.android.example.view.SlidingTabLayout;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
-import java.lang.ref.WeakReference;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -28,7 +26,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-public class Main {
+public class MainPage {
     @InjectView(R.id.main_toolbar)
     Toolbar mToolbar;
     @InjectView(R.id.main_sliding_tab)
@@ -36,7 +34,7 @@ public class Main {
     @InjectView(R.id.main_view_pager)
     ViewPager mViewPager;
 
-    public Main(MainActivity activity) {
+    public MainPage(MainActivity activity) {
         if (activity == null) {
             throw new NullPointerException("activity == null");
         }
@@ -75,31 +73,6 @@ public class Main {
 
     private PagerAdapter getPagerAdapter() {
         return mViewPager.getAdapter();
-    }
-
-    static class StrictViewMatcher extends TypeSafeMatcher<View> {
-        private final WeakReference<View> mView;
-
-        public StrictViewMatcher(View view) {
-            mView = new WeakReference<View>(view);
-        }
-
-        @Override
-        public boolean matchesSafely(View view) {
-            final View expectedView = getView();
-            if (expectedView == null) {
-                return false;
-            }
-            return expectedView.equals(view);
-        }
-
-        @Override
-        public void describeTo(Description description) {
-        }
-
-        private View getView() {
-            return mView.get();
-        }
     }
 
     static class SlidingTabTitleMatcher extends TypeSafeMatcher<View> {

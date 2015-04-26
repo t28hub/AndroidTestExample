@@ -13,7 +13,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.t28.android.example.R;
-import com.t28.android.example.pages.Main;
+import com.t28.android.example.pages.MainPage;
 import com.t28.android.example.test.AssetReader;
 import com.t28.android.example.volley.BasicRequestMatcher;
 import com.t28.android.example.volley.MethodMatcher;
@@ -37,7 +37,7 @@ import static org.assertj.android.api.Assertions.assertThat;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
+public class MainPageActivityTest {
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class, true, false);
 
@@ -45,7 +45,7 @@ public class MainActivityTest {
     private MockRequestQueue mRequestQueue;
     private CountingIdlingResource mRequestIdlingResource;
 
-    public MainActivityTest() {
+    public MainPageActivityTest() {
     }
 
     @BeforeClass
@@ -220,9 +220,9 @@ public class MainActivityTest {
     @Test
     public void pageObjectShouldWorkApproprietely() throws InterruptedException {
         final MainActivity activity = getActivity();
-        final Main main = new Main(activity);
-        main.showOptionsMenu();
-        main.selectOptionsMenu(R.id.action_refresh);
+        final MainPage mainPage = new MainPage(activity);
+        mainPage.showOptionsMenu();
+        mainPage.selectOptionsMenu(R.id.action_refresh);
         Thread.sleep(2000);
     }
 
