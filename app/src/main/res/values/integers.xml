@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="action_refresh_order">100</integer>
-    <integer name="action_setting_order">200</integer>
+    <integer name="action_search_order">100</integer>
+    <integer name="action_refresh_order">200</integer>
+    <integer name="action_setting_order">300</integer>
 </resources>

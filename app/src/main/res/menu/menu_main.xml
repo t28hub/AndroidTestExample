@@ -3,6 +3,12 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".MainActivity">
 
+    <item android:id="@+id/action_search"
+          android:title="@string/action_search"
+          android:icon="@drawable/abc_ic_search_api_mtrl_alpha"
+          android:orderInCategory="@integer/action_search_order"
+          app:showAsAction="ifRoom"/>
+
     <item android:id="@+id/action_refresh"
           android:title="@string/action_refresh"
           android:orderInCategory="@integer/action_refresh_order"
