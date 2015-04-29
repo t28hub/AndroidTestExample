@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 
 import com.t28.android.example.R;
 import com.t28.android.example.data.adapter.FragmentAdapter;
@@ -55,6 +56,10 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         final int id = item.getItemId();
+        if (id == R.id.action_refresh) {
+            onMenuItemSelected(Window.FEATURE_OPTIONS_PANEL, item);
+            return true;
+        }
         if (id == R.id.action_settings) {
             return true;
         }
