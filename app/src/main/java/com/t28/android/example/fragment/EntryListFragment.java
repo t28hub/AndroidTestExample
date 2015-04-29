@@ -91,6 +91,7 @@ public class EntryListFragment extends Fragment implements EntryListAdapter.OnEn
     public boolean onOptionsItemSelected(MenuItem item) {
         final int itemId = item.getItemId();
         if (itemId == R.id.action_refresh) {
+            getLayout().changeState(StatefulFrameLayout.State.LOADING);
             refresh();
             return true;
         }
