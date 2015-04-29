@@ -1,4 +1,4 @@
-package com.t28.android.example.activity;
+package com.t28.android.example.activities;
 
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -11,8 +11,8 @@ import android.view.Window;
 
 import com.t28.android.example.R;
 import com.t28.android.example.data.adapter.FragmentAdapter;
-import com.t28.android.example.fragment.EntryListFragment;
-import com.t28.android.example.view.SlidingTabLayout;
+import com.t28.android.example.fragments.EntryListFragment;
+import com.t28.android.example.views.SlidingTabLayout;
 
 import java.util.ArrayList;
 import java.util.List;

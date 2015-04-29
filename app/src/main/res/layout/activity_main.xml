@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"/>
 
-    <com.t28.android.example.view.SlidingTabLayout
+    <com.t28.android.example.views.SlidingTabLayout
         android:id="@+id/main_sliding_tab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

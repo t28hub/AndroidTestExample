@@ -13,8 +13,8 @@ import android.view.ViewParent;
 import android.widget.TextView;
 
 import com.t28.android.example.R;
-import com.t28.android.example.activity.MainActivity;
-import com.t28.android.example.view.SlidingTabLayout;
+import com.t28.android.example.activities.MainActivity;
+import com.t28.android.example.views.SlidingTabLayout;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;

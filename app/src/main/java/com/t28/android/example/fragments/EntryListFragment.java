@@ -1,4 +1,4 @@
-package com.t28.android.example.fragment;
+package com.t28.android.example.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +23,7 @@ import com.t28.android.example.data.adapter.EntryListAdapter;
 import com.t28.android.example.data.adapter.FragmentAdapter;
 import com.t28.android.example.data.model.Entry;
 import com.t28.android.example.data.model.Feed;
-import com.t28.android.example.view.StatefulFrameLayout;
+import com.t28.android.example.views.StatefulFrameLayout;
 import com.t28.android.example.volley.VolleyProvider;
 
 import java.util.concurrent.TimeUnit;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.t28.android.example.view;
+package com.t28.android.example.views;
 
 import android.R;
 import android.content.Context;

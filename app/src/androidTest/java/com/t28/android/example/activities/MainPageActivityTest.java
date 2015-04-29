@@ -1,4 +1,4 @@
-package com.t28.android.example.activity;
+package com.t28.android.example.activities;
 
 import android.app.Activity;
 import android.content.Context;
